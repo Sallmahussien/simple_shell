@@ -98,7 +98,7 @@ int _atoi(char *str)
 		else if (*str >= '0' && *str <= '9')
 			num = (num * 10) + (*str - '0');
 
-		else if (num > 0)
+		else
 			break;
 
 		str++;
