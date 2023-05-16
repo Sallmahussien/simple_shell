@@ -151,25 +151,34 @@ char *file_dir(char **dirs, char *file_name)
 	char *arg_path, *arg;
 	int i = 0, ii, j = 0, len_path = 0, len_arg = 0, flag = 0;
 
+	printf("%s\n", file_name);
+	printf("befor the loop //\n");
 
-	printf("befor the loop //");
-
-	for(i = 0; file_name[i] != '\0'; i++)
+	if (file_name[0] == '/')
 	{
-	  printf("inside the loop //");
-		if(file_name[i] == '/')
-		{
-			flag = 1;
-			printf("//");
-			break;
-		}
-	  }
+		printf("entered if\n");
+		flag = 1;
+	}
+	printf("flag: %d\n", flag);
+
+	// for(i = 0; file_name[i] != '\0'; i++)
+	// {
+	//   printf("inside the loop //");
+	// 	if(file_name[i] == '/')
+	// 	{
+	// 		flag = 1;
+	// 		printf("//");
+	// 		break;
+	// 	}
+	// }
 
 	//if(flag == 1 && chdir(file_name) == 0)
 	// return (file_name);
 
+	printf("before for loop\n");
 	for (i = 0; dirs[i] != NULL; i++)
 	{
+		printf("enetered for\n");
 		if(chdir(dirs[i]) == -1)
 		{
 			perror("chdir failed");
@@ -185,41 +194,43 @@ char *file_dir(char **dirs, char *file_name)
 				return(file_name);
 			}
 			}*/
-		printf("before if the file name have /");
+		printf("before if the file name have\n");
 		if (flag == 1)
 		  {
-		    printf("in the if ");
-		    arg_path = file_name;
-		    printf("%s", arg_path);
+				printf("enetered if flag\n");
+		    arg_path = malloc(sizeof(char) * strlen(file_name));
+		    strcpy(arg_path, file_name);
+		    printf("%s\n\n", arg_path);
 		  }
 		else
 		  {
-		len_path = _strlen(dirs[i]);
-		len_arg = _strlen(file_name);
-		arg_path = malloc(sizeof(char) * (len_path + len_arg + 2));
-		if (arg_path == NULL)
-		{
-			for(ii = 0; ii < i; ii++)
-				free(dirs[ii]);
-			free(dirs);
-			free(arg_path);
-			return (NULL);
+			len_path = _strlen(dirs[i]);
+			len_arg = _strlen(file_name);
+			arg_path = malloc(sizeof(char) * (len_path + len_arg + 2));
+			if (arg_path == NULL)
+			{
+				for(ii = 0; ii < i; ii++)
+					free(dirs[ii]);
+				free(dirs);
+				free(arg_path);
+				return (NULL);
+			}
+			_strcpy(arg_path, dirs[i]);
+			arg_path[len_path] = '/';
+			arg = file_name;
+			for (j = 0; j < len_arg; j++)
+				arg_path[len_path + j + 1] = arg[j];
+			arg_path[len_path + j + 1] = '\0';
 		}
-		_strcpy(arg_path, dirs[i]);
-		arg_path[len_path] = '/';
-		arg = file_name;
-		for (j = 0; j < len_arg; j++)
-			arg_path[len_path + j + 1] = arg[j];
-		arg_path[len_path + j + 1] = '\0';
 
 		if (access(arg_path, X_OK) == 0)
-		{
-			for (ii = 0; dirs[ii] != NULL; ii++)
-				free(dirs[ii]);
-			free(dirs);
-			return(arg_path);
-		}
-		  }
+			{
+				for (ii = 0; dirs[ii] != NULL; ii++)
+					free(dirs[ii]);
+				free(dirs);
+				return(arg_path);
+			}
+			
 		free(arg_path);
 	}
 
