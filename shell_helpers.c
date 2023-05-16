@@ -12,11 +12,11 @@ char **parse_string(char *lineptr)
 	char **arg;
 	int no_tokens = 0, i = 0;
 
-	input = malloc(sizeof(char) * (strlen(lineptr) + 1));
-	strcpy(input, lineptr);
+	input = malloc(sizeof(char) * (_strlen(lineptr) + 1));
+	_strcpy(input, lineptr);
 
-	cpy_input = malloc(sizeof(char) * (strlen(lineptr) + 1));
-	strcpy(cpy_input, input);
+	cpy_input = malloc(sizeof(char) * (_strlen(lineptr) + 1));
+	_strcpy(cpy_input, input);
 
 	token = strtok(input, " ");
 	while (token != NULL)
@@ -30,8 +30,8 @@ char **parse_string(char *lineptr)
 	token = strtok(cpy_input, " ");
 	while (token)
 	{
-		arg[i] = malloc(sizeof(char) * (strlen(token) + 1));
-		strcpy(arg[i++], token);
+		arg[i] = malloc(sizeof(char) * (_strlen(token) + 1));
+		_strcpy(arg[i++], token);
 		token = strtok(NULL, " ");
 	}
 	arg[i] = NULL;
@@ -51,6 +51,7 @@ char **parse_string(char *lineptr)
 int execute(char **args, char **argv)
 {
 	pid_t pid;
+	int exec = 0, status;
 
 	pid = fork();
 		if (pid == -1)
@@ -63,14 +64,16 @@ int execute(char **args, char **argv)
 			if (execve(args[0], args, NULL) == -1)
 			{
 				perror(argv[0]);
-				return (-1);
+				exec = 127;
+				_exit(exec);
 			}
 		}
 		else
 		{
-			wait(NULL);
+			wait(&status);
+			exec = WEXITSTATUS(status);
 		}
-		return (0);
+		return (exec);
 }
 
 /**
@@ -155,4 +158,45 @@ char *read_for_noninteractive(void)
 	buffer[buffer_size - 1] = '\0';
 
 	return (buffer);
+}
+
+/**
+ * handle_exit_err - handle errors for exit built-in
+ * @arr: array of parsed strings
+ * @argv: argument list that comes from main
+ * @lineptr: buffer that be read from getline
+ * Return: return value of exit
+*/
+
+int handle_exit_err (char **arr, char **argv, char *lineptr)
+{
+	int ret = 0, i;
+
+	if (atoi(arr[1]) < 0)
+	{
+		write(STDERR_FILENO, argv[0], _strlen(argv[0]));
+		write(STDERR_FILENO, ": exit: Illegal number: ", 25);
+		write(STDERR_FILENO, arr[1], _strlen(arr[1]));
+		write(STDERR_FILENO, "\n", 1);
+	}
+	else if (_atoi(arr[1]) >= 0 && _atoi(arr[1]) <= 255)
+	{
+		ret = _atoi(arr[1]);
+		for (i = 0; arr[i]; i++)
+			free(arr[i]);
+		free(arr);
+		free(lineptr);
+		exit(ret);
+	}
+	else
+	{
+		ret = _atoi(arr[1]) - 256;
+		for (i = 0; arr[i]; i++)
+			free(arr[i]);
+		free(arr);
+		free(lineptr);
+		exit(ret);
+	}
+
+	return (ret);
 }
