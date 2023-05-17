@@ -141,13 +141,13 @@ char *file_dir(char **dirs, char *file_name)
  * Return: void
  */
 
-void free_arr(char **dirs)
+void free_arr(char **arr)
 {
 	int ii;
 
-	for (ii = 0; dirs[ii] != NULL; ii++)
-		free(dirs[ii]);
-	free(dirs);
+	for (ii = 0; arr[ii] != NULL; ii++)
+		free(arr[ii]);
+	free(arr);
 }
 
 int main(int argc, char *argv[])
