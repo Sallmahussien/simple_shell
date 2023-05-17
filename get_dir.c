@@ -97,8 +97,7 @@ char *file_dir(char **dirs, char *file_name)
 	char *arg_path, *arg;
 	int i = 0, ii, j = 0, len_path = 0, len_arg = 0, flag = 0;
 
-	if (file_name[0] == '/')
-		flag = 1;
+	flag = (file_name[0] == '/') ? 1 : 0;
 	for (i = 0; dirs[i] != NULL; i++)
 	{
 		if (chdir(dirs[i]) == -1)
@@ -118,38 +117,37 @@ char *file_dir(char **dirs, char *file_name)
 			arg_path = malloc(sizeof(char) * (len_path + len_arg + 2));
 			if (arg_path == NULL)
 			{
-				free_dirs(dirs);
+				free_arr(dirs);
 				free(arg_path);
 				return (NULL);
 			}
 			_strcpy(arg_path, dirs[i]);
 			arg_path[len_path] = '/';
-			arg = file_name;
-			for (j = 0; j < len_arg; j++)
-				arg_path[len_path + j + 1] = arg[j];
-			arg_path[len_path + j + 1] = '\0';
+			_strcat(arg_path, file_name);
 		}
 		if (access(arg_path, X_OK) == 0)
 		{
-			free_dirs(dirs);
+			free_arr(dirs);
 			return (arg_path);
 		}
 		free(arg_path);
 	}
-	free_dirs(dirs);
+	free_arr(dirs);
 	return (NULL);
 }
 /**
- * free_dirs - free array from malloc
+ * free_arr - free array from malloc
  * @dirs: pointer of array of direcertires
  * Return: void
  */
 
-void free_dirs(char **dirs)
+void free_arr(char **dirs)
 {
+	int ii;
+
 	for (ii = 0; dirs[ii] != NULL; ii++)
 		free(dirs[ii]);
-	free(dirs)
+	free(dirs);
 }
 
 int main(int argc, char *argv[])
