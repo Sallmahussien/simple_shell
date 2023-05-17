@@ -18,21 +18,21 @@ char **parse_string(char *lineptr)
 	cpy_input = malloc(sizeof(char) * (_strlen(lineptr) + 1));
 	_strcpy(cpy_input, input);
 
-	token = strtok(input, " ");
+	token = _strtok(input, " ");
 	while (token != NULL)
 	{
 		no_tokens++;
-		token = strtok(NULL, " ");
+		token = _strtok(NULL, " ");
 	}
 
 	arg = malloc(sizeof(char *) * (no_tokens + 1));
 
-	token = strtok(cpy_input, " ");
+	token = _strtok(cpy_input, " ");
 	while (token)
 	{
 		arg[i] = malloc(sizeof(char) * (_strlen(token) + 1));
 		_strcpy(arg[i++], token);
-		token = strtok(NULL, " ");
+		token = _strtok(NULL, " ");
 	}
 	arg[i] = NULL;
 
