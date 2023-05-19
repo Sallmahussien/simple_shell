@@ -10,7 +10,7 @@ int interactive(char **argv)
 	ssize_t p;
 	size_t n = 0;
 	char *lineptr = NULL, **arr;
-	char *path, *arg_path, **dirs, *err;
+	char *path, *arg_path, **dirs, *err, *err_n;
 	int exec, ret = 0, history = 1;
 	/*int i = 0;*/
 
@@ -29,14 +29,12 @@ int interactive(char **argv)
 
 		arr = parse_string(lineptr);
 
-		exec = is_exit(arr, lineptr, argv, ret);
-		if (exec == -1)
+		ret = is_exit(arr, lineptr, argv, ret);
+		if (ret == -1)
 			continue;
 
 		path = get_path();
 		dirs = get_dirs(path);
-		/*for (i = 0; dirs[i]; i++)
-			printf("%s\n", dirs[i]);*/
 		arg_path = file_dir(dirs, arr[0]);
 
 		if (!_strcmp(arg_path, "not found"))
@@ -44,13 +42,15 @@ int interactive(char **argv)
 			err = malloc(sizeof(char) * (_strlen(argv[0]) + _strlen(arr[0]) + 16));
 			_strcpy(err, argv[0]);
 			_strcat(err, ": ");
-			/*_strcat(err, itoa(history));*/
+			err_n = tostring(history);
+			_strcat(err, err_n);
 			_strcat(err, ": ");
 			_strcat(err, arr[0]);
 			_strcat(err, ": not found\n");
 			ret = 127;
 			write(STDERR_FILENO, err, _strlen(err));
 			free(err);
+			free(err_n);
 			continue;
 		}
 		else

@@ -28,6 +28,7 @@ int _strncmp(char *s1, char *s2, int ind);
 int _strcmp(char *s1, char *s2);
 int _atoi(char *str);
 char *_strcat(char *dest, char *src);
+char *tostring(int num);
 
 char *_strtok(char *str, const char *delim);
 
