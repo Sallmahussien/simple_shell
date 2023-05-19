@@ -51,6 +51,7 @@ int interactive(char **argv)
 			ret = 127;
 			write(STDERR_FILENO, err, _strlen(err));
 			free(err);
+			continue;
 		}
 		else
 		{
