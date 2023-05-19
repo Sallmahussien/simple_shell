@@ -29,8 +29,8 @@ int interactive(char **argv)
 
 		arr = parse_string(lineptr);
 
-		ret = is_exit(arr, lineptr, argv);
-		if (ret == -1)
+		exec = is_exit(arr, lineptr, argv, ret);
+		if (exec == -1)
 			continue;
 
 		path = get_path();
@@ -88,7 +88,7 @@ int non_interactive(char **argv)
 
 	arr = parse_string(buffer);
 
-	ret = is_exit(arr, buffer, argv);
+	ret = is_exit(arr, buffer, argv, ret);
 		if (ret == -1)
 			return (exec);
 

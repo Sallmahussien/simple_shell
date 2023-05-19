@@ -20,7 +20,7 @@ void *_realloc(void *ptr, unsigned int old_size, unsigned int new_size);
 char *read_for_noninteractive(void);
 int handle_exit_err(char **arr, char **argv, char *lineptr);
 
-int is_exit(char **arr, char *lineptr, char **argv);
+int is_exit(char **arr, char *lineptr, char **argv, int ret)
 
 int _strlen(char *s);
 char *_strcpy(char *dest, char *src);

@@ -8,10 +8,8 @@
  * Return: status exit value
 */
 
-int is_exit(char **arr, char *lineptr, char **argv)
+int is_exit(char **arr, char *lineptr, char **argv, int ret)
 {
-	int ret = 0;
-
 	if (_strcmp(arr[0], "exit") == 0 && arr[1] == NULL)
 	{
 		free_arr(arr);
