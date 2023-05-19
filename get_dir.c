@@ -1,12 +1,4 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
-#include <fcntl.h>
-#include <sys/types.h>
-#include <sys/wait.h>
-#include <string.h>
-
-extern char **environ;
+#include "main.h"
 
 /**
  * get_path - gets the path of the environment
@@ -94,17 +86,19 @@ char **get_dirs(char *path)
 
 char *file_dir(char **dirs, char *file_name)
 {
-	char *arg_path, *arg;
-	int i = 0, ii, j = 0, len_path = 0, len_arg = 0, flag = 0;
+	char *arg_path;
+	int i = 0, len_path = 0, len_arg = 0, flag = 0;
 
 	flag = (file_name[0] == '/') ? 1 : 0;
+	printf("enetered function\n");
 	for (i = 0; dirs[i] != NULL; i++)
 	{
-		if (chdir(dirs[i]) == -1)
+		/*printf("loop: %d\n", i);*/
+		/*if (chdir(dirs[i]) == -1)
 		{
 			perror("chdir failed");
 			continue;
-		}
+		}*/
 		if (flag == 1)
 		{
 			arg_path = malloc(sizeof(char) * strlen(file_name));
@@ -115,6 +109,7 @@ char *file_dir(char **dirs, char *file_name)
 			len_path = _strlen(dirs[i]);
 			len_arg = _strlen(file_name);
 			arg_path = malloc(sizeof(char) * (len_path + len_arg + 2));
+			printf("created malloc: %d\n", i);
 			if (arg_path == NULL)
 			{
 				free_arr(dirs);
@@ -130,10 +125,14 @@ char *file_dir(char **dirs, char *file_name)
 			free_arr(dirs);
 			return (arg_path);
 		}
+		printf("%s\n", arg_path);
 		free(arg_path);
+		printf("free malloc\n");
 	}
+	arg_path = malloc(sizeof(char) * 10);
+	_strcpy(arg_path, "not found");
 	free_arr(dirs);
-	return (NULL);
+	return (arg_path);
 }
 /**
  * free_arr - free array from malloc
@@ -150,7 +149,7 @@ void free_arr(char **arr)
 	free(arr);
 }
 
-int main(int argc, char *argv[])
+/*int main(int argc __attribute__((unused)), char **argv __attribute__((unused)))
 {
 	char  *path, *arg_path, **dirs;
 
@@ -164,4 +163,4 @@ int main(int argc, char *argv[])
 	free(arg_path);
 	free(path);
 	return (0);
-}
+}*/

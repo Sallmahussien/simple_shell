@@ -64,7 +64,7 @@ int execute(char **args, char **argv)
 			if (execve(args[0], args, NULL) == -1)
 			{
 				perror(argv[0]);
-				exec = 127;
+				exec = 2;
 				_exit(exec);
 			}
 		}
@@ -178,6 +178,7 @@ int handle_exit_err (char **arr, char **argv, char *lineptr)
 		write(STDERR_FILENO, ": exit: Illegal number: ", 25);
 		write(STDERR_FILENO, arr[1], _strlen(arr[1]));
 		write(STDERR_FILENO, "\n", 1);
+		ret = -1;
 	}
 	else if (_atoi(arr[1]) >= 0 && _atoi(arr[1]) <= 255)
 	{

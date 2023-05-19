@@ -9,9 +9,10 @@ int interactive(char **argv)
 {
 	ssize_t p;
 	size_t n = 0;
-	char *lineptr = NULL;
-	char **arr;
-	int i, exec, ret = 0;
+	char *lineptr = NULL, **arr;
+	char *path, *arg_path, **dirs, *err;
+	int exec, ret = 0, history = 1;
+	/*int i = 0;*/
 
 	while (1)
 	{
@@ -28,28 +29,54 @@ int interactive(char **argv)
 
 		arr = parse_string(lineptr);
 
-		if (_strcmp(arr[0], "exit") == 0 && arr[1] == NULL)
+		ret = is_exit(arr, lineptr, argv);
+		if (ret == -1)
+			continue;
+
+		path = get_path();
+		dirs = get_dirs(path);
+		/*for (i = 0; dirs[i]; i++)
+			printf("%s\n", dirs[i]);*/
+		printf("salma\n");
+		fflush(stdout);
+		arg_path = file_dir(dirs, arr[0]);
+		printf("ahmed\n");
+		fflush(stdout);
+
+		write(STDOUT_FILENO, arg_path, _strlen(arg_path));
+		write(STDOUT_FILENO, "\n", 1);
+
+		if (!_strcmp(arg_path, "not found"))
 		{
-			for (i = 0; arr[i]; i++)
-				free(arr[i]);
-			free(arr);
-			free(lineptr);
-			exit(ret);
+			err = malloc(sizeof(char) * (_strlen(argv[0]) + _strlen(arr[0]) + 16));
+			_strcpy(err, argv[0]);
+			_strcat(err, ": ");
+			/*_strcat(err, itoa(history));*/
+			_strcat(err, ": ");
+			_strcat(err, arr[0]);
+			_strcat(err, ": not found\n");
+			ret = 127;
+			write(STDERR_FILENO, err, _strlen(err));
+			free(err);
 		}
-		else if (_strcmp(arr[0], "exit") == 0 && arr[1] != NULL)
+		else
 		{
-			ret = handle_exit_err(arr, argv, lineptr);
-			if (ret == 0)
-				continue;
+			arr[0] = _realloc(arr[0], _strlen(arr[0]), _strlen(arg_path));
+			strcpy(arr[0], arg_path);
 		}
+
+		write(STDOUT_FILENO, arr[0], _strlen(arr[0]));
+		write(STDOUT_FILENO, "\n", 1);
+		printf("sizeof arr: %d\n", _strlen(arr[0]));
+		fflush(stdout);
 
 		exec = execute(arr, argv);
 
 		ret = exec;
-
-		for (i = 0; arr[i]; i++)
-			free(arr[i]);
-		free(arr);
+		free(arg_path);
+		free(path);
+		free_arr(arr);
+		history++;
 	}
 
 	free(lineptr);
@@ -66,25 +93,15 @@ int non_interactive(char **argv)
 {
 	char *buffer;
 	char **arr;
-	int exec, i, ret = 0;
+	int exec = 0, i, ret = 0;
 
 	buffer = read_for_noninteractive();
 
 	arr = parse_string(buffer);
 
-	if (_strcmp(arr[0], "exit") == 0 && arr[1] == NULL)
-	{
-		for (i = 0; arr[i]; i++)
-			free(arr[i]);
-		free(arr);
-		free(buffer);
-		exit(ret);
-	}
-	else if (_strcmp(arr[0], "exit") == 0 && arr[1] != NULL)
-	{
-		ret = handle_exit_err(arr, argv, buffer);
-		return (ret);
-	}
+	ret = is_exit(arr, buffer, argv);
+		if (ret == -1)
+			return (exec);
 
 	exec = execute(arr, argv);
 
