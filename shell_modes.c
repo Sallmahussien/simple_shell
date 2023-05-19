@@ -11,11 +11,12 @@ int interactive(char **argv)
 	size_t n = 0;
 	char *lineptr = NULL, **arr;
 	char *path, *arg_path, **dirs, *err, *err_n;
-	int exec, ret = 0, history = 1;
+	int exec, ret = 0, history = 0;
 	/*int i = 0;*/
 
 	while (1)
 	{
+		history++;
 		write(STDOUT_FILENO, "$ ", 2);
 
 		p = getline(&lineptr, &n, stdin);
@@ -65,7 +66,6 @@ int interactive(char **argv)
 		free(arg_path);
 		free(path);
 		free_arr(arr);
-		history++;
 	}
 
 	free(lineptr);
