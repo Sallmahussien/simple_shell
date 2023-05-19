@@ -58,11 +58,6 @@ int interactive(char **argv)
 			strcpy(arr[0], arg_path);
 		}
 
-		write(STDOUT_FILENO, arr[0], _strlen(arr[0]));
-		write(STDOUT_FILENO, "\n", 1);
-		printf("sizeof arr: %d\n", _strlen(arr[0]));
-		fflush(stdout);
-
 		exec = execute(arr, argv);
 
 		ret = exec;
