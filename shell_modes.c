@@ -37,14 +37,7 @@ int interactive(char **argv)
 		dirs = get_dirs(path);
 		/*for (i = 0; dirs[i]; i++)
 			printf("%s\n", dirs[i]);*/
-		printf("salma\n");
-		fflush(stdout);
 		arg_path = file_dir(dirs, arr[0]);
-		printf("ahmed\n");
-		fflush(stdout);
-
-		write(STDOUT_FILENO, arg_path, _strlen(arg_path));
-		write(STDOUT_FILENO, "\n", 1);
 
 		if (!_strcmp(arg_path, "not found"))
 		{

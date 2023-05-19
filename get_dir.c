@@ -90,10 +90,8 @@ char *file_dir(char **dirs, char *file_name)
 	int i = 0, len_path = 0, len_arg = 0, flag = 0;
 
 	flag = (file_name[0] == '/') ? 1 : 0;
-	printf("enetered function\n");
 	for (i = 0; dirs[i] != NULL; i++)
 	{
-		/*printf("loop: %d\n", i);*/
 		/*if (chdir(dirs[i]) == -1)
 		{
 			perror("chdir failed");
@@ -109,7 +107,6 @@ char *file_dir(char **dirs, char *file_name)
 			len_path = _strlen(dirs[i]);
 			len_arg = _strlen(file_name);
 			arg_path = malloc(sizeof(char) * (len_path + len_arg + 2));
-			printf("created malloc: %d\n", i);
 			if (arg_path == NULL)
 			{
 				free_arr(dirs);
@@ -125,9 +122,7 @@ char *file_dir(char **dirs, char *file_name)
 			free_arr(dirs);
 			return (arg_path);
 		}
-		printf("%s\n", arg_path);
 		free(arg_path);
-		printf("free malloc\n");
 	}
 	arg_path = malloc(sizeof(char) * 10);
 	_strcpy(arg_path, "not found");
