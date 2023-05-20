@@ -1,25 +1,4 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
-#include <fcntl.h>
-#include <sys/types.h>
-#include <sys/wait.h>
-#include <string.h>
-
-extern char **environ;
-
-/**
- * struct node - linked list of the environment
- * @data: string
- * @len: length of the string
- * @next: points to the next node
- */
-
-typedef struct node {
-	char *data;
-        unsigned int len;
-	struct node *next;
-} node;
+#include "main.h"
 
 
 /**
