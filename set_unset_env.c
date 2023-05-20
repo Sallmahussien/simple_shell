@@ -1,6 +1,30 @@
 #include "main.h"
 
 /**
+ * get_linked_list_var - gives the variable name of each node
+ * @curr_node:  current node of linked list
+ * Return: the variable name
+ */
+
+char *get_linked_list_var(node *curr_node)
+{
+	char *name;
+	int len, i;
+
+	len = _strlen(curr_node->data);
+	for (i = 0; curr_node->data[i] != '='; i++)
+		;
+	name = malloc(sizeof(char) * (i + 1));
+	if (name == NULL)
+		return (0);
+	for (i = 0; curr_node->data[i] != '='; i++)
+		name[i] = curr_node->data[i];
+	name[i] = '\0';
+
+	return (name);
+}
+
+/**
  * set_env - change or add an environment variable
  * @var: the varibale
  * @value: the value
