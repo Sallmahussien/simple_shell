@@ -3,10 +3,11 @@
 /**
  * parse_string - parse a string according to a delimiter
  * @lineptr: input string
+ * @delim: delimeter
  * Return: array of pointer characters to the parsed string
 */
 
-char **parse_string(char *lineptr)
+char **parse_string(char *lineptr, char *delim)
 {
 	char *token, *input, *cpy_input;
 	char **arg;
@@ -18,16 +19,16 @@ char **parse_string(char *lineptr)
 	cpy_input = malloc(sizeof(char) * (_strlen(lineptr) + 1));
 	_strcpy(cpy_input, input);
 
-	token = _strtok(input, " ");
+	token = _strtok(input, delim);
 	while (token != NULL)
 	{
 		no_tokens++;
-		token = _strtok(NULL, " ");
+		token = _strtok(NULL, delim);
 	}
 
 	arg = malloc(sizeof(char *) * (no_tokens + 1));
 
-	token = _strtok(cpy_input, " ");
+	token = _strtok(cpy_input, delim);
 	while (token)
 	{
 		arg[i] = malloc(sizeof(char) * (_strlen(token) + 1));
@@ -145,9 +146,6 @@ char *read_for_noninteractive(void)
 
 		buffer_size += rd;
 
-		if (buffer[buffer_size - 1] == '\n')
-			break;
-
 		if ((size_t) rd == size)
 		{
 			buffer = _realloc(buffer, sizeof(char) * buffer_size,
@@ -179,6 +177,7 @@ int handle_exit_err (char **arr, char **argv, char *lineptr)
 		write(STDERR_FILENO, arr[1], _strlen(arr[1]));
 		write(STDERR_FILENO, "\n", 1);
 		ret = -1;
+		free_arr(arr);
 	}
 	else if (_atoi(arr[1]) >= 0 && _atoi(arr[1]) <= 255)
 	{

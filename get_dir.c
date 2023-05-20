@@ -2,15 +2,16 @@
 
 /**
  * get_path - gets the path of the environment
+ * @envp: enviroment variable
  * Return: the path
  */
 
-char *get_path(void)
+char *get_path(char **envp)
 {
 	char **curr, *path;
 	int len;
 
-	curr = environ;
+	curr = envp;
 
 	while (*curr)
 	{
@@ -114,7 +115,7 @@ char *file_dir(char **dirs, char *file_name)
 				return (NULL);
 			}
 			_strcpy(arg_path, dirs[i]);
-			arg_path[len_path] = '/';
+			_strcat(arg_path, "/");
 			_strcat(arg_path, file_name);
 		}
 		if (access(arg_path, X_OK) == 0)

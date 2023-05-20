@@ -3,16 +3,15 @@
 /**
  * interactive - execute shell in the interactive mode
  * @argv: array of pointers to arguments
+ * @envp: array of pointers to enviroment variables
  * Return: the return value of the execution
 */
-int interactive(char **argv)
+int interactive(char **argv, char **envp)
 {
 	ssize_t p;
 	size_t n = 0;
 	char *lineptr = NULL, **arr;
-	char *path, *arg_path, **dirs, *err, *err_n;
-	int exec, ret = 0, history = 0;
-	/*int i = 0;*/
+	int exec, ret = 0, history = 0, is_dir;
 
 	while (1)
 	{
@@ -28,43 +27,22 @@ int interactive(char **argv)
 
 		lineptr[p - 1] = '\0';
 
-		arr = parse_string(lineptr);
+		arr = parse_string(lineptr, " ");
 
 		ret = is_exit(arr, lineptr, argv, ret);
 		if (ret == -1)
 			continue;
 
-		path = get_path();
-		dirs = get_dirs(path);
-		arg_path = file_dir(dirs, arr[0]);
-
-		if (!_strcmp(arg_path, "not found"))
+		is_dir = check_command(arr, envp, argv, history);
+		if (!is_dir)
 		{
-			err = malloc(sizeof(char) * (_strlen(argv[0]) + _strlen(arr[0]) + 16));
-			_strcpy(err, argv[0]);
-			_strcat(err, ": ");
-			err_n = tostring(history);
-			_strcat(err, err_n);
-			_strcat(err, ": ");
-			_strcat(err, arr[0]);
-			_strcat(err, ": not found\n");
 			ret = 127;
-			write(STDERR_FILENO, err, _strlen(err));
-			free(err);
-			free(err_n);
 			continue;
-		}
-		else
-		{
-			arr[0] = _realloc(arr[0], _strlen(arr[0]), _strlen(arg_path));
-			strcpy(arr[0], arg_path);
 		}
 
 		exec = execute(arr, argv);
 
 		ret = exec;
-		free(arg_path);
-		free(path);
 		free_arr(arr);
 	}
 
@@ -78,25 +56,36 @@ int interactive(char **argv)
  * @argv: array of pointers to arguments
  * Return: the return value of the execution
 */
-int non_interactive(char **argv)
+int non_interactive(char **argv, char **envp)
 {
 	char *buffer;
-	char **arr;
-	int exec = 0, i, ret = 0;
+	char **arr, **comands;
+	int exec = 0, i = 0, ret = 0, history = 0, is_dir;
 
 	buffer = read_for_noninteractive();
+	comands = parse_string(buffer, "\n");
 
-	arr = parse_string(buffer);
+	while(comands[i])
+	{
+		history++;
 
-	ret = is_exit(arr, buffer, argv, ret);
-		if (ret == -1)
-			return (exec);
+		arr = parse_string(comands[i], " ");
 
-	exec = execute(arr, argv);
+		ret = is_exit(arr, comands[i], argv, ret);
+			if (ret == -1)
+				return (exec);
+		is_dir = check_command(arr, envp, argv, history);
+		if (!is_dir)
+		{
+			ret = 127;
+			return (ret);
+		}
 
-	for (i = 0; arr[i]; i++)
-		free(arr[i]);
-	free(arr);
+		exec = execute(arr, argv);
+
+		free_arr(arr);
+		i++;
+	}
 	free(buffer);
 
 	return (exec);
