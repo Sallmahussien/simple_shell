@@ -33,7 +33,7 @@ char **parse_string(char *lineptr, char *delim)
 	{
 		arg[i] = malloc(sizeof(char) * (_strlen(token) + 1));
 		_strcpy(arg[i++], token);
-		token = _strtok(NULL, " ");
+		token = _strtok(NULL, delim);
 	}
 	arg[i] = NULL;
 
@@ -136,22 +136,25 @@ char *read_for_noninteractive(ssize_t fd)
 	size_t buffer_size = 0, size = 1024;
 	ssize_t rd;
 
-	buffer = malloc(sizeof(char) * size);
+	buffer = malloc(sizeof(char) * (size + 1));
 	while ((rd = read(fd, buffer + buffer_size, size)) > 0)
 	{
-		if (rd == -1)
-		{
-			perror("read");
-			return (NULL);
-		}
 
 		buffer_size += rd;
 
-		if ((size_t) rd == size)
+		if (buffer_size >= size)
 		{
+			size *= 2;
 			buffer = _realloc(buffer, sizeof(char) * buffer_size,
-				sizeof(char) * buffer_size * 2);
+				sizeof(char) * size);
 		}
+	}
+
+	if (rd == -1)
+	{
+		perror("read");
+		free(buffer);
+		return (NULL);
 	}
 
 	buffer[buffer_size - 1] = '\0';

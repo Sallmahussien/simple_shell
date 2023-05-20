@@ -1,2 +1,5 @@
 ls
-lk
+ls -l
+hj
+/bin/ls
+exit 3

@@ -59,26 +59,28 @@ int interactive(char **argv, char **envp)
 int non_interactive(char **argv, char **envp)
 {
 	char *buffer;
-	char **arr, **comands;
+	char **arr, **commands;
 	int exec = 0, i = 0, ret = 0, history = 0, is_dir;
 
 	buffer = read_for_noninteractive(STDIN_FILENO);
-	comands = parse_string(buffer, "\n");
+	commands = parse_string(buffer, "\n");
 
-	while(comands[i])
+	while(commands[i])
 	{
 		history++;
 
-		arr = parse_string(comands[i], " ");
+		arr = parse_string(commands[i], " ");
 
-		ret = is_exit(arr, comands[i], argv, ret);
-			if (ret == -1)
-				return (exec);
+		ret = is_exit(arr, commands[i], argv, ret);
+		if (ret == -1)
+			continue;
+
 		is_dir = check_command(arr, envp, argv, history);
 		if (!is_dir)
 		{
 			ret = 127;
-			return (ret);
+			i++;
+			continue;
 		}
 
 		exec = execute(arr, argv);
@@ -86,6 +88,7 @@ int non_interactive(char **argv, char **envp)
 		free_arr(arr);
 		i++;
 	}
+	free_arr(commands);
 	free(buffer);
 
 	return (exec);
@@ -99,34 +102,49 @@ int non_interactive(char **argv, char **envp)
  */
 int file_command(char **argv, char **envp)
 {
-	char *buffer;
-	char **arr, **comands;
+	char *buffer, **arr, **commands, *err;
 	int exec = 0, i = 0, ret = 0, history = 0, is_dir;
-	ssize_t op;
+	ssize_t op, rd;
 
 	op = open(argv[1], O_RDONLY);
-
-	buffer = read_for_noninteractive(op);
-	printf("buffer size: %d\n", _strlen(buffer));
-	fflush(stdout);
+	if (op == -1)
+	{
+		write(STDERR_FILENO, argv[0], _strlen(argv[0]));
+		write(STDERR_FILENO, ": ", 2);
+		err = tostring(history);
+		write(STDERR_FILENO, err, _strlen(err));
+		write(STDERR_FILENO, ": Can't open ", 13);
+		write(STDERR_FILENO, argv[1], _strlen(argv[1]));
+		write(STDERR_FILENO, "\n", 1);
+		free(err);
+		return (127);
+	}
+	
+	buffer = malloc(sizeof(char) * 1024);
+	rd = read(op, buffer, 1023);
+	if (rd == -1)
+		return (-1);
+	buffer[rd - 1] = '\0';
 	close (op);
-	comands = parse_string(buffer, "\n");
 
-	while(comands[i])
+	commands = parse_string(buffer, "\n");
+
+	while(commands[i])
 	{
 		history++;
 
-		arr = parse_string(comands[i], " ");
+		arr = parse_string(commands[i], " ");
 
-		ret = is_exit(arr, comands[i], argv, ret);
+		ret = is_exit(arr, commands[i], argv, ret);
 		if (ret == -1)
-			return (exec);
+			continue;
 
 		is_dir = check_command(arr, envp, argv, history);
 		if (!is_dir)
 		{
 			ret = 127;
-			return (ret);
+			i++;
+			continue;
 		}
 
 		exec = execute(arr, argv);
@@ -134,6 +152,7 @@ int file_command(char **argv, char **envp)
 		free_arr(arr);
 		i++;
 	}
+	free_arr(commands);
 	free(buffer);
 
 	return (exec);

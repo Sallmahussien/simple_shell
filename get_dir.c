@@ -100,7 +100,7 @@ char *file_dir(char **dirs, char *file_name)
 		}*/
 		if (flag == 1)
 		{
-			arg_path = malloc(sizeof(char) * strlen(file_name));
+			arg_path = malloc(sizeof(char) * (strlen(file_name) + 1));
 			_strcpy(arg_path, file_name);
 		}
 		else
