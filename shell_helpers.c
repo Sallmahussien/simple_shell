@@ -127,16 +127,17 @@ void *_realloc(void *ptr, unsigned int old_size, unsigned int new_size)
 
 /**
  * read_for_noninteractive - read the input for non-interactive mode
+ * @fd: file descriptor
  * Return: pointer to buffer that has the input
 */
-char *read_for_noninteractive(void)
+char *read_for_noninteractive(ssize_t fd)
 {
 	char *buffer = NULL;
 	size_t buffer_size = 0, size = 1024;
 	ssize_t rd;
 
 	buffer = malloc(sizeof(char) * size);
-	while ((rd = read(STDIN_FILENO, buffer + buffer_size, size)) > 0)
+	while ((rd = read(fd, buffer + buffer_size, size)) > 0)
 	{
 		if (rd == -1)
 		{

@@ -11,6 +11,12 @@ int main(int argc __attribute__((unused)), char **argv __attribute__((unused)),
 {
 	int ret;
 
+	if (argc != 1)
+	{
+		ret = file_command(argv, envp);
+		return (ret);
+	}
+
 	if (isatty(STDIN_FILENO))
 		ret = interactive(argv, envp);
 	else

@@ -62,7 +62,7 @@ int non_interactive(char **argv, char **envp)
 	char **arr, **comands;
 	int exec = 0, i = 0, ret = 0, history = 0, is_dir;
 
-	buffer = read_for_noninteractive();
+	buffer = read_for_noninteractive(STDIN_FILENO);
 	comands = parse_string(buffer, "\n");
 
 	while(comands[i])
@@ -74,6 +74,54 @@ int non_interactive(char **argv, char **envp)
 		ret = is_exit(arr, comands[i], argv, ret);
 			if (ret == -1)
 				return (exec);
+		is_dir = check_command(arr, envp, argv, history);
+		if (!is_dir)
+		{
+			ret = 127;
+			return (ret);
+		}
+
+		exec = execute(arr, argv);
+
+		free_arr(arr);
+		i++;
+	}
+	free(buffer);
+
+	return (exec);
+}
+
+/**
+ * file_command: take a file as a command line argument
+ * @argv: array of pointers to arguments
+ * @envp: array of pointers to enviroment variables
+ * Return: the return value of the execution
+ */
+int file_command(char **argv, char **envp)
+{
+	char *buffer;
+	char **arr, **comands;
+	int exec = 0, i = 0, ret = 0, history = 0, is_dir;
+	ssize_t op;
+
+	op = open(argv[1], O_RDONLY);
+
+	buffer = read_for_noninteractive(op);
+	printf("buffer size: %d\n", _strlen(buffer));
+	fflush(stdout);
+	close (op);
+	comands = parse_string(buffer, "\n");
+
+	while(comands[i])
+	{
+		history++;
+
+		arr = parse_string(comands[i], " ");
+
+		ret = is_exit(arr, comands[i], argv, ret);
+		if (ret == -1)
+			return (exec);
+
 		is_dir = check_command(arr, envp, argv, history);
 		if (!is_dir)
 		{
