@@ -38,8 +38,7 @@ int main(void)
 	const char *new_home;
 	char **curr_env;  
 
-	curr_env = get_env();
-	env_list = get_env_list(curr_env);
+	env_list = get_env_list(environ);
 
 	_env(env_list);
 
