@@ -1,19 +1,5 @@
 #include "main.h"
 
-
-/**
- * get_env - get the environment
- * Return: 2D array of environment arguments
- */
-
-char **get_env(void)
-{
-	char **curr;
-
-	curr = environ;
-	return (curr);
-}
-
 /**
  * get_env_list - creat a linked list of the environment
  * @env: 2D array of environment arguments
