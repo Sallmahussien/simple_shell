@@ -24,9 +24,12 @@ node *get_env_list(char **env)
  * @head: linked list
  */
 
-void _env(node *head)
+int _env(char *var, char *value, node *head)
 {
+	UNUSED(var);
+	UNUSED(value);
 	print_list(head);
+	return (0);
 }
 
 

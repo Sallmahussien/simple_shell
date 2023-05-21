@@ -83,12 +83,13 @@ int set_env(char *var, char *value, node **head)
  * Return: 0 or -1
  */
 
-int unset_env(char *var, node **head)
+int unset_env(char *var, char *value, node **head)
 {
 	node *env_list;
 	char *name, *val;
 	int len, i = 0, check;
 
+	UNUSED(value);
 	env_list = *head;
 	while (env_list != NULL)
 	{
