@@ -47,9 +47,9 @@ char **parse_string(char *lineptr, char *delim);
 int execute(char **args, char **argv);
 void *_realloc(void *ptr, unsigned int old_size, unsigned int new_size);
 char *read_for_noninteractive(ssize_t fd);
-int handle_exit_err (char **arr, char **argv, char *lineptr, node *env_list);
+int handle_exit_err (char **arr, char **argv, char *lineptr, node *env_list, char **sequences);
 
-int is_exit(char **arr, char *lineptr, char **argv, int ret, node *env_list);
+int is_exit(char **arr, char *lineptr, char **argv, int ret, node *env_list, char **sequences);
 int check_command(char **arr, char **envp, char **argv, int history);
 int check_builtins(node *env_list, char **arr, int *ret);
 void check_null(char *command, char **arr, int *is_builtin);

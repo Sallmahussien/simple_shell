@@ -7,21 +7,23 @@
  * @lineptr: buffer that be read from getline
  * @ret: the return of the previous process
  * @env_list: linked list for environment variables
+ * @sequences: array to pointers to sequencing commands
  * Return: status exit value
 */
 
-int is_exit(char **arr, char *lineptr, char **argv, int ret, node *env_list)
+int is_exit(char **arr, char *lineptr, char **argv, int ret, node *env_list, char **sequences)
 {
 	if (_strcmp(arr[0], "exit") == 0 && arr[1] == NULL)
 	{
 		free_arr(arr);
 		free(lineptr);
 		free_list(env_list);
+		free_arr(sequences);
 		exit(ret);
 	}
 	else if (_strcmp(arr[0], "exit") == 0 && arr[1] != NULL)
 	{
-		ret = handle_exit_err(arr, argv, lineptr, env_list);
+		ret = handle_exit_err(arr, argv, lineptr, env_list, sequences);
 	}
 
 	return (ret);

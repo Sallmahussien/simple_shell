@@ -1,5 +1,2 @@
-env
-setenv salma ahmed
-env
-unsetenv salma
-env
+ls
+echo salma ; thy ; ls -l

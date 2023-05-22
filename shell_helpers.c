@@ -166,14 +166,15 @@ char *read_for_noninteractive(ssize_t fd)
  * handle_exit_err - handle errors for exit built-in
  * @arr: array of parsed strings
  * @argv: argument list that comes from main
- * env_list: linked list for environment variables
  * @lineptr: buffer that be read from getline
+ * @env_list: linked list for environment variables
+ * @sequences: array of pointers to sequences commands
  * Return: return value of exit
 */
 
-int handle_exit_err (char **arr, char **argv, char *lineptr, node *env_list)
+int handle_exit_err (char **arr, char **argv, char *lineptr, node *env_list, char **sequences)
 {
-	int ret = 0, i;
+	int ret = 0;
 
 	if (atoi(arr[1]) < 0)
 	{
@@ -187,21 +188,19 @@ int handle_exit_err (char **arr, char **argv, char *lineptr, node *env_list)
 	else if (_atoi(arr[1]) >= 0 && _atoi(arr[1]) <= 255)
 	{
 		ret = _atoi(arr[1]);
-		for (i = 0; arr[i]; i++)
-			free(arr[i]);
-		free(arr);
+		free_arr(arr);
 		free(lineptr);
 		free_list(env_list);
+		free_arr(sequences);
 		exit(ret);
 	}
 	else
 	{
 		ret = _atoi(arr[1]) - 256;
-		for (i = 0; arr[i]; i++)
-			free(arr[i]);
-		free(arr);
+		free_arr(arr);
 		free(lineptr);
 		free_list(env_list);
+		free_arr(sequences);
 		exit(ret);
 	}
 
