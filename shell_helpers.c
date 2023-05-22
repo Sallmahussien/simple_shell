@@ -182,7 +182,7 @@ int handle_exit_err (char **arr, char **argv, char *lineptr, node *env_list, cha
 		write(STDERR_FILENO, ": exit: Illegal number: ", 25);
 		write(STDERR_FILENO, arr[1], _strlen(arr[1]));
 		write(STDERR_FILENO, "\n", 1);
-		ret = -1;
+		ret = 1;
 		free_arr(arr);
 	}
 	else if (_atoi(arr[1]) >= 0 && _atoi(arr[1]) <= 255)

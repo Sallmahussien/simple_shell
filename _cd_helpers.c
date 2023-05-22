@@ -111,6 +111,8 @@ int past_dir(char *curr_cwd, node **head, char **argv, char **arr, int history)
 				for (i = 7; env_list->data[i]; i++)
 					new_dir[ii++] = env_list->data[i];
 				new_dir[ii] = '\0';
+				write(STDOUT_FILENO, new_dir, _strlen(new_dir));
+				write(STDOUT_FILENO, "\n", 1);
 				if (check_change_dir(curr_cwd, new_dir, name, &env_list, argv, arr, history) == 0)
 					return (0);
 				else
