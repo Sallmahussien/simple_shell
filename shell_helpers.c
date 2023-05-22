@@ -166,11 +166,12 @@ char *read_for_noninteractive(ssize_t fd)
  * handle_exit_err - handle errors for exit built-in
  * @arr: array of parsed strings
  * @argv: argument list that comes from main
+ * env_list: linked list for environment variables
  * @lineptr: buffer that be read from getline
  * Return: return value of exit
 */
 
-int handle_exit_err (char **arr, char **argv, char *lineptr)
+int handle_exit_err (char **arr, char **argv, char *lineptr, node *env_list)
 {
 	int ret = 0, i;
 
@@ -190,6 +191,7 @@ int handle_exit_err (char **arr, char **argv, char *lineptr)
 			free(arr[i]);
 		free(arr);
 		free(lineptr);
+		free_list(env_list);
 		exit(ret);
 	}
 	else
@@ -199,6 +201,7 @@ int handle_exit_err (char **arr, char **argv, char *lineptr)
 			free(arr[i]);
 		free(arr);
 		free(lineptr);
+		free_list(env_list);
 		exit(ret);
 	}
 

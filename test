@@ -1,5 +1,5 @@
-ls
-ls -l
-hj
-/bin/ls
-exit 3
+env
+setenv salma ahmed
+env
+unsetenv salma
+env

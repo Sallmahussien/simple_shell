@@ -1,3 +1,5 @@
+#include "main.h"
+
 /**
  * *add_node_end - function that adds a new node at the end of a list.
  * @head: pointer to the head

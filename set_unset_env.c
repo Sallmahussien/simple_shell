@@ -9,9 +9,9 @@
 char *get_linked_list_var(node *curr_node)
 {
 	char *name;
-	int len, i;
+	int i;
 
-	len = _strlen(curr_node->data);
+	/*len = _strlen(curr_node->data);*/
 	for (i = 0; curr_node->data[i] != '='; i++)
 		;
 	name = malloc(sizeof(char) * (i + 1));
@@ -36,7 +36,6 @@ int set_env(char *var, char *value, node **head)
 {
 	node *env_list;
 	char *name, *val = NULL;
-	int len;
 
 	env_list = *head;
 	val = malloc(sizeof(char) * (_strlen(var) + _strlen(value) + 2));
@@ -64,7 +63,7 @@ int set_env(char *var, char *value, node **head)
 				env_list->len = _strlen(val);
 				free(val);
 				free(name);
-				return (1);
+				return (0);
 			}
 			free(name);
 		}
@@ -86,8 +85,8 @@ int set_env(char *var, char *value, node **head)
 int unset_env(char *var, char *value, node **head)
 {
 	node *env_list;
-	char *name, *val;
-	int len, i = 0, check;
+	char *name;
+	int i = 0, check;
 
 	UNUSED(value);
 	env_list = *head;

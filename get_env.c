@@ -24,17 +24,19 @@ node *get_env_list(char **env)
  * @head: linked list
  */
 
-int _env(char *var, char *value, node *head)
+int _env(char *var, char *value __attribute__((unused)), node **head)
 {
+	node *h = *head;
+
 	UNUSED(var);
 	UNUSED(value);
-	print_list(head);
+	print_list(h);
 	return (0);
 }
 
 
 
-int main(void)
+/*int main(void)
 {
 	node *env_list, *after;
 	const char *home = getenv("HOME");
@@ -64,4 +66,4 @@ int main(void)
 	free_list(env_list);
   
 	return (0);
-}
+}*/

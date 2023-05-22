@@ -90,3 +90,17 @@ char *_strdup(char *str)
 	return (dup);
 }
 
+/**
+ * strnum: return number of strings in array of strings
+ * @arr: array of pointer to strings
+ * Return: no of strings
+ */
+int strnum(char **arr)
+{
+	int i;
+
+	for (i = 0; arr[i]; i++)
+		;
+
+	return (i);
+}
