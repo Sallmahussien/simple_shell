@@ -37,7 +37,7 @@ int interactive(char **argv, char **envp, node *env_list)
 			if (ret == -1)
                         	continue;
 
-                	is_builtin = check_builtins(env_list, arr, &ret);
+                	is_builtin = check_builtins(env_list, arr, &ret, argv, history);
                 	if (is_builtin)
 			{
 				j++;
@@ -95,7 +95,7 @@ int non_interactive(char **argv, char **envp, node *env_list)
 			ret = is_exit(arr, buffer, argv, ret, env_list, sequences);
 			if (ret == -1)
 				continue;
-			is_builtin = check_builtins(env_list, arr, &ret);
+			is_builtin = check_builtins(env_list, arr, &ret, argv, history);
 			if (is_builtin)
 			{
 				j++;
@@ -173,7 +173,8 @@ int file_command(char **argv, char **envp, node *env_list)
 			ret = is_exit(arr, buffer, argv, ret, env_list, sequences);
 			if (ret == -1)
 				continue;
-			is_builtin = check_builtins(env_list, arr, &ret);
+			printf("after entering builtin\n");
+			is_builtin = check_builtins(env_list, arr, &ret, argv, history);
 			if (is_builtin)
 			{
 				j++;

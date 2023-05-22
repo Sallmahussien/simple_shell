@@ -36,7 +36,7 @@ typedef struct node
 typedef struct built_in
 {
 	char *command;
-	int (*func)(char *var, char *value, node **head);
+	int (*func)(char *var, char *value, node **head, char **argv, char **arr, int history);
 } builtin;
 
 int interactive(char **argv, char **envp, node *env_list);
@@ -51,7 +51,7 @@ int handle_exit_err (char **arr, char **argv, char *lineptr, node *env_list, cha
 
 int is_exit(char **arr, char *lineptr, char **argv, int ret, node *env_list, char **sequences);
 int check_command(char **arr, char **envp, char **argv, int history);
-int check_builtins(node *env_list, char **arr, int *ret);
+int check_builtins(node *env_list, char **arr, int *ret, char **argv, int history);
 void check_null(char *command, char **arr, int *is_builtin);
 
 int _strlen(char *s);
@@ -78,10 +78,21 @@ void free_list(node *head);
 int delete_node_at_index(node **head, unsigned int index);
 
 node *get_env_list(char **env);
-int _env(char *var, char *value, node **head);
+int _env(char *var, char *value, node **head, char **argv, char **arr, int history);
+int env_err(char **argv, char **arr, int history);
 
 char *get_linked_list_var(node *curr_node);
-int set_env(char *var, char *value, node **head);
-int unset_env(char *var, char *value, node **head);
+int set_env(char *var, char *value, node **head, char **argv, char **arr, int history);
+int unset_env(char *var, char *value, node **head, char **argv, char **arr, int history);
+
+int change_dir(char *dir,  char *curr_cwd, node **head, char **argv, char **arr, int history);
+int change_dir_direct(char *dir, char *curr_cwd, node **head, char **argv, char **arr, int history);
+int _cd(char *dir, char *value, node **head, char **argv, char **arr, int history);
+
+int check_change_dir(char *curr_cwd, char *new_dir, char *name, node **head, char **argv, char **arr, int history);
+int null_dir(char *curr_cwd, node **head, char **argv, char **arr, int history);
+int past_dir(char *curr_cwd, node **head, char **argv, char **arr, int history);
+int back_dir(char *curr_cwd, node **head, char **argv, char **arr, int history);
+
 
 #endif

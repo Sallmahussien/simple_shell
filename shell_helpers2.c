@@ -80,9 +80,11 @@ int check_command(char **arr, char **envp, char **argv, int history)
  * @env_list: linked list of environment variables
  * @arr: array of character pointers to patsed strings
  * @ret: pointer to the return value
+ * @argv: array of character pointers to argumnets from main
+ * @history: history
  * Return: 0 if the command is not built-in, 1 otherwise
  */
-int check_builtins(node *env_list, char **arr, int *ret)
+int check_builtins(node *env_list, char **arr, int *ret, char **argv, int history)
 {
 	int is_builtin = 0, i;
 	builtin my_builtins[] = {
@@ -96,27 +98,28 @@ int check_builtins(node *env_list, char **arr, int *ret)
 	{
 		if (!_strcmp(arr[0], "env") && !_strcmp(my_builtins[i].command, arr[0]))
 		{
-			*ret = my_builtins[i].func(arr[0], NULL, &env_list);
+			*ret = my_builtins[i].func(arr[0], NULL, &env_list, argv, arr, history);
 			break;
 		}
 		if (!_strcmp(arr[0], "setenv") && !_strcmp(my_builtins[i].command, arr[0]))
 		{
 			if (strnum(arr) != 3)
 			{
-				write(STDERR_FILENO, "usage: setenv var value\n", 25);
+				*ret = env_err(argv, arr, history);
 				break;
 			}
-			*ret = my_builtins[i].func(arr[1], arr[2], &env_list);
+			printf("ss\n");
+			*ret = my_builtins[i].func(arr[1], arr[2], &env_list, argv, arr, history);
 			break;
 		}
 		if (!_strcmp(my_builtins[i].command, arr[0])) 
 		{
 			if (strnum(arr) != 2)
 			{
-				write(STDERR_FILENO, "usage: unsetenv var\n", 21);
+				*ret = env_err(argv, arr, history);
 				break;
 			}
-			*ret = my_builtins[i].func(arr[1], arr[2], &env_list);
+			*ret = my_builtins[i].func(arr[1], arr[2], &env_list, argv, arr, history);
 			break;
 		}		
 	}

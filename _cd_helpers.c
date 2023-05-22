@@ -9,12 +9,12 @@
  * Return: 0 or 1
  */
 
-int check_change_dir(char *curr_cwd, char *new_dir, char *name, node **head)
+int check_change_dir(char *curr_cwd, char *new_dir, char *name, node **head, char **argv, char **arr, int history)
 {
 	node *env_list;
 
 	env_list = *head;
-	if (change_dir(new_dir, curr_cwd, &env_list) == 0)
+	if (change_dir(new_dir, curr_cwd, &env_list, argv, arr, history) == 0)
 	{
 		free(name);
 		free(new_dir);
@@ -36,7 +36,7 @@ int check_change_dir(char *curr_cwd, char *new_dir, char *name, node **head)
  * Return: 0 or 1
  */
 
-int null_dir(char *curr_cwd, node **head)
+int null_dir(char *curr_cwd, node **head, char **argv, char **arr, int history)
 {
 	node *env_list = *head;
 	char *new_dir = NULL, *name;
@@ -57,13 +57,13 @@ int null_dir(char *curr_cwd, node **head)
 				new_dir = malloc(sizeof(char) * (_strlen(env_list->data) - 4));
 				if (new_dir == NULL)
 				{
-					perror("malloc")
+					perror("malloc");
 					return (2);
 				}
 				for (i = 5; env_list->data[i]; i++)
 					new_dir[ii++] = env_list->data[i];
 				new_dir[ii] = '\0';
-				if (check_change_dir(curr_cwd, new_dir, name, &env_list) == 0)
+				if (check_change_dir(curr_cwd, new_dir, name, &env_list, argv, arr, history) == 0)
 					return (0);
 				else
 					return (2);
@@ -84,7 +84,7 @@ int null_dir(char *curr_cwd, node **head)
  * Return: 0 or 2
  */
 
-int past_dir(char *curr_cwd, node **head)
+int past_dir(char *curr_cwd, node **head, char **argv, char **arr, int history)
 {
 	node *env_list = *head;
 	char *new_dir = NULL, *name;
@@ -111,7 +111,7 @@ int past_dir(char *curr_cwd, node **head)
 				for (i = 7; env_list->data[i]; i++)
 					new_dir[ii++] = env_list->data[i];
 				new_dir[ii] = '\0';
-				if (check_change_dir(curr_cwd, new_dir, name, &env_list) == 0)
+				if (check_change_dir(curr_cwd, new_dir, name, &env_list, argv, arr, history) == 0)
 					return (0);
 				else
 					return (2);			}
@@ -130,7 +130,7 @@ int past_dir(char *curr_cwd, node **head)
  * Return: 0 or 2
  */
 
-int back_dir(char *curr_cwd, node **head)
+int back_dir(char *curr_cwd, node **head, char **argv, char **arr, int history)
 {
 	node *env_list;
 	char *new_dir;
@@ -154,7 +154,7 @@ int back_dir(char *curr_cwd, node **head)
 	for (i = 0; i < len; i++)
 		new_dir[i] = curr_cwd[i];
 	new_dir[i] = '\0';
-	if (change_dir(new_dir, curr_cwd, &env_list) == 0)
+	if (change_dir(new_dir, curr_cwd, &env_list, argv, arr, history) == 0)
 	{
 		free(new_dir);
 		return (0);

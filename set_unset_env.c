@@ -29,10 +29,13 @@ char *get_linked_list_var(node *curr_node)
  * @var: the varibale
  * @value: the value
  * @head: the head node
+ * @argv: array of character pointers to the arguments from main
+ * @arr: array of character pinter to parsed string
+ * @history: history
  * Return: 0 or -1
  */
 
-int set_env(char *var, char *value, node **head)
+int set_env(char *var, char *value, node **head, char **argv, char **arr, int history)
 {
 	node *env_list;
 	char *name, *val = NULL;
@@ -40,7 +43,7 @@ int set_env(char *var, char *value, node **head)
 	env_list = *head;
 	val = malloc(sizeof(char) * (_strlen(var) + _strlen(value) + 2));
 	if (val == NULL)
-		return (-1);
+		return (env_err(argv, arr, history));
 	_strcpy(val, var);
 	_strcat(val, "=");
 	_strcat(val, value);
@@ -51,7 +54,7 @@ int set_env(char *var, char *value, node **head)
 		if (env_list->data == NULL)
 		{
 			perror("env_list");
-			return (-1);
+			return (env_err(argv, arr, history));
 		}
 		else
 		{
@@ -78,11 +81,15 @@ int set_env(char *var, char *value, node **head)
 /**
  * unset_env - Remove an environment variable
  * @var: the variable of the environment that will be removed
+ * @value: value
  * @head: the head node
+ * @argv: array of character pointers to the arguments from main
+ * @arr: array of character pinter to parsed string
+ * @history: history
  * Return: 0 or -1
  */
 
-int unset_env(char *var, char *value, node **head)
+int unset_env(char *var, char *value, node **head, char **argv, char **arr, int history)
 {
 	node *env_list;
 	char *name;
@@ -96,7 +103,7 @@ int unset_env(char *var, char *value, node **head)
 		if (env_list->data == NULL)
 		{
 			perror("env_list");
-			return (-1);
+			return (env_err(argv, arr, history));
 		}
 		else
 		{
@@ -109,13 +116,12 @@ int unset_env(char *var, char *value, node **head)
 					return (0);
 				else if (check == -1)
 				{
-					perror("node not fount");
-					return (-1);
+					return (env_err(argv, arr, history));
 				}
 			}
 		}
 		free(name);
 		env_list = env_list->next;
 	}
-	return (-1);
+	return (env_err(argv, arr, history));
 }
