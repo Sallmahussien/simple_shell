@@ -72,7 +72,7 @@ int execute(char **args, char **argv, int history)
 				write(STDERR_FILENO, err, _strlen(err));
 				write(STDERR_FILENO, ": ", 2);
 				write(STDERR_FILENO, args[1], _strlen(args[1]));
-				write(STDERR_FILENO, ": Permission denied\n", 22);
+				write(STDERR_FILENO, ": Permission denied\n", 21);
 				free(err);
 				exec = 126;
 				_exit(exec);
