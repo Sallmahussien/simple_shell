@@ -109,11 +109,10 @@ int check_builtins(node *env_list, char **arr, int *ret, char **argv, int histor
 				*ret = env_err(argv, arr, history);
 				break;
 			}
-			printf("ss\n");
 			*ret = my_builtins[i].func(arr[1], arr[2], &env_list, argv, arr, history);
 			break;
 		}
-		if (!_strcmp(arr[0], "setenv")  && !_strcmp(my_builtins[i].command, arr[0])) 
+		if (!_strcmp(arr[0], "unsetenv")  && !_strcmp(my_builtins[i].command, arr[0])) 
 		{
 			if (strnum(arr) != 2)
 			{
