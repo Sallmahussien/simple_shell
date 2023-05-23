@@ -2,8 +2,8 @@
 
 /**
  * _strtok - breaks a string into tokens
- * str: input string to be breaked
- * delim: delimeter that used to break string at
+ * @str: input string to be breaked
+ * @delim: delimeter that used to break string at
  * Return: pointer to tokens
 */
 
@@ -16,12 +16,12 @@ char *_strtok(char *str, const char *delim)
 		ptr = str;
 	while (*ptr == ' ')
 		ptr++;
-		
+
 	if (ptr == NULL || *ptr == '\0')
 		return (NULL);
 
 	token = ptr;
-	while(*ptr != '\0')
+	while (*ptr != '\0')
 	{
 		if (*ptr == *delim)
 		{
