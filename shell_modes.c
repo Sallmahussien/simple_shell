@@ -34,7 +34,10 @@ int interactive(char **argv, char **envp, node *env_list)
 			arr = parse_string(sequences[j], " ");
 			ret = is_exit(arr, lineptr, argv, ret, env_list, sequences);
 			if (ret == 1)
+			{
+                        	j++;
                         	continue;
+			}
 
                 	is_builtin = check_builtins(env_list, arr, &ret, argv, history);
                 	if (is_builtin)
