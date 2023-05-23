@@ -91,6 +91,7 @@ int check_builtins(node *env_list, char **arr, int *ret, char **argv, int histor
 		{"env", _env},
 		{"setenv", set_env},
 		{"unsetenv", unset_env},
+		{"cd", _cd},
 		{NULL, NULL}
 	};
 
@@ -112,7 +113,7 @@ int check_builtins(node *env_list, char **arr, int *ret, char **argv, int histor
 			*ret = my_builtins[i].func(arr[1], arr[2], &env_list, argv, arr, history);
 			break;
 		}
-		if (!_strcmp(my_builtins[i].command, arr[0])) 
+		if (!_strcmp(arr[0], "setenv")  && !_strcmp(my_builtins[i].command, arr[0])) 
 		{
 			if (strnum(arr) != 2)
 			{
@@ -121,7 +122,12 @@ int check_builtins(node *env_list, char **arr, int *ret, char **argv, int histor
 			}
 			*ret = my_builtins[i].func(arr[1], arr[2], &env_list, argv, arr, history);
 			break;
-		}		
+		}
+		if (!_strcmp(arr[0], "cd") && !_strcmp(my_builtins[i].command, arr[0]))
+		{
+			*ret = my_builtins[i].func(arr[1], NULL, &env_list, argv, arr, history);
+			break;
+		}
 	}
 	check_null(my_builtins[i].command, arr, &is_builtin);
 	return (is_builtin);

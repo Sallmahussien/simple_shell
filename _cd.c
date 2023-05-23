@@ -33,8 +33,7 @@ int change_dir(char *dir,  char *curr_cwd, node **head, char **argv, char **arr,
 		write(STDERR_FILENO, err, _strlen(err));
 		write(STDERR_FILENO, ": ", 2);
 		write(STDERR_FILENO, arr[0], _strlen(arr[0]));
-		write(STDERR_FILENO, ": can’t cd to ", 15);
-		write(STDERR_FILENO, arr[1], _strlen(arr[1]));
+		write(STDERR_FILENO, ": can’t cd to ", 16);
 		write(STDERR_FILENO, arr[1], _strlen(arr[1]));
 		write(STDERR_FILENO, "\n", 1);
 		free(err);
