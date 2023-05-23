@@ -11,16 +11,22 @@
  * Return: 0 or -1
  */
 
-int change_dir(char *dir,  char *curr_cwd, node **head, char **argv, char **arr, int history)
+int change_dir(char *dir,  char *curr_cwd, node **head,
+	       char **argv, char **arr, int history)
 {
 	node *env_list;
 	char cwd[300], *err;
+	char *arr_pwd[4] = {"set_env", "PWD"}, *arr_old[4] = {"set_env", "OLDPWD"};
 
+	arr_pwd[2] = dir;
+	arr_pwd[3] = NULL;
+	arr_old[2] = curr_cwd;
+	arr_old[3] = NULL;
 	env_list = *head;
 	if (chdir(dir) == 0)
 	{
-		set_env("PWD", dir, &env_list, argv, arr, history);
-		set_env("OLDPWD", curr_cwd, &env_list, argv, arr, history);
+		set_env(&env_list, argv, arr_pwd, history);
+		set_env(&env_list, argv, arr_old, history);
 		if (getcwd(cwd, sizeof(cwd)) == NULL)
 		{
 			perror("getcwd");
@@ -56,7 +62,8 @@ int change_dir(char *dir,  char *curr_cwd, node **head, char **argv, char **arr,
  * Return: 0 or 2
  */
 
-int change_dir_direct(char *dir, char *curr_cwd, node **head, char **argv, char **arr, int history)
+int change_dir_direct(char *dir, char *curr_cwd, node **head,
+		      char **argv, char **arr, int history)
 {
 	node *env_list = *head;
 	char *new_dir;
@@ -107,9 +114,9 @@ int _cd(node **head, char **argv, char **arr, int history)
 		return (2);
 	}
 
-	if (dir == NULL || _strcmp(dir, "~") == 0)
+	if (arr[1] == NULL || _strcmp(arr[1], "~") == 0)
 		ret = null_dir(curr_cwd, &env_list, argv, arr, history);
-	else if (dir[0] == '/')
+	else if (arr[1][0] == '/')
 		ret = change_dir(arr[1], curr_cwd, &env_list, argv, arr, history);
 	else if (_strcmp(arr[1], "..") == 0)
 	{
@@ -117,7 +124,7 @@ int _cd(node **head, char **argv, char **arr, int history)
 			return (0);
 		ret = back_dir(curr_cwd, &env_list, argv, arr, history);
 	}
-	else if (_strcmp(dir, "-") == 0)
+	else if (_strcmp(arr[1], "-") == 0)
 		ret = past_dir(curr_cwd, &env_list, argv, arr, history);
 	else
 		ret = change_dir_direct(arr[1], curr_cwd, &env_list, argv, arr, history);

@@ -6,10 +6,14 @@
  * @new_dir: the new dir will be moved to
  * @name: variable name in linked list
  * @head: head node of linked list
+ * @argv: array of character pointer to argumnets from main
+ * @arr: arry of character pointer to parsed string
+ * @history: history
  * Return: 0 or 1
  */
 
-int check_change_dir(char *curr_cwd, char *new_dir, char *name, node **head, char **argv, char **arr, int history)
+int check_change_dir(char *curr_cwd, char *new_dir, char *name, node **head,
+		     char **argv, char **arr, int history)
 {
 	node *env_list;
 
@@ -33,6 +37,9 @@ int check_change_dir(char *curr_cwd, char *new_dir, char *name, node **head, cha
  * null_dir - move to home directory
  * @head: head node of environment linked list
  * @curr_cwd: current cwd
+ * @argv: array of character pointer to argumnets from main
+ * @arr: arry of character pointer to parsed string
+ * @history: history
  * Return: 0 or 1
  */
 
@@ -63,7 +70,8 @@ int null_dir(char *curr_cwd, node **head, char **argv, char **arr, int history)
 				for (i = 5; env_list->data[i]; i++)
 					new_dir[ii++] = env_list->data[i];
 				new_dir[ii] = '\0';
-				if (check_change_dir(curr_cwd, new_dir, name, &env_list, argv, arr, history) == 0)
+				if (check_change_dir(curr_cwd, new_dir, name,
+						     &env_list, argv, arr, history) == 0)
 					return (0);
 				else
 					return (2);
@@ -81,6 +89,9 @@ int null_dir(char *curr_cwd, node **head, char **argv, char **arr, int history)
  * past_dir - move to home directory
  * @head: head node of environment linked list
  * @curr_cwd: current cwd
+ * @argv: array of character pointer to argumnets from main
+ * @arr: arry of character pointer to parsed string
+ * @history: history
  * Return: 0 or 2
  */
 
@@ -113,7 +124,8 @@ int past_dir(char *curr_cwd, node **head, char **argv, char **arr, int history)
 				new_dir[ii] = '\0';
 				write(STDOUT_FILENO, new_dir, _strlen(new_dir));
 				write(STDOUT_FILENO, "\n", 1);
-				if (check_change_dir(curr_cwd, new_dir, name, &env_list, argv, arr, history) == 0)
+				if (check_change_dir(curr_cwd, new_dir, name,
+						     &env_list, argv, arr, history) == 0)
 					return (0);
 				else
 					return (2);			}
@@ -129,6 +141,9 @@ int past_dir(char *curr_cwd, node **head, char **argv, char **arr, int history)
  * back_dir - change dir step back
  * @curr_cwd: current cwd
  * @head: head node of linked list
+ * @argv: array of character pointer to argumnets from main
+ * @arr: arry of character pointer to parsed string
+ * @history: history
  * Return: 0 or 2
  */
 
