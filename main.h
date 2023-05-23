@@ -36,15 +36,29 @@ typedef struct node
 typedef struct built_in
 {
 	char *command;
-	int (*func)(char *var, char *value, node **head, char **argv, char **arr, int history);
+	int (*func)(node **head, char **argv, char **arr, int history);
 } builtin;
 
-int interactive(char **argv, char **envp, node *env_list);
-int non_interactive(char **argv, char **envp, node *env_list);
-int file_command(char **argv, char **envp, node *env_list);
+/**
+ * struct ali - linked list of the environment
+ * @name: alias name
+ * @value: alias value
+ * @next: points to the next node
+ */
+
+typedef struct ali
+{
+        char *name;
+        char *value;
+        struct ali *next;
+} ali;
+
+int interactive(char **argv, char **envp, node *env_list, ali *list);
+int non_interactive(char **argv, char **envp, node *env_list, ali *list);
+int file_command(char **argv, char **envp, node *env_list, ali *list);
 
 char **parse_string(char *lineptr, char *delim);
-int execute(char **args, char **argv);
+int execute(char **args, char **argv, int history);
 void *_realloc(void *ptr, unsigned int old_size, unsigned int new_size);
 char *read_for_noninteractive(ssize_t fd);
 int handle_exit_err (char **arr, char **argv, char *lineptr, node *env_list, char **sequences);
@@ -78,21 +92,25 @@ void free_list(node *head);
 int delete_node_at_index(node **head, unsigned int index);
 
 node *get_env_list(char **env);
-int _env(char *var, char *value, node **head, char **argv, char **arr, int history);
+int _env(node **head, char **argv, char **arr, int history);
 int env_err(char **argv, char **arr, int history);
 
 char *get_linked_list_var(node *curr_node);
-int set_env(char *var, char *value, node **head, char **argv, char **arr, int history);
-int unset_env(char *var, char *value, node **head, char **argv, char **arr, int history);
+int set_env(node **head, char **argv, char **arr, int history);
+int unset_env(node **head, char **argv, char **arr, int history);
 
 int change_dir(char *dir,  char *curr_cwd, node **head, char **argv, char **arr, int history);
 int change_dir_direct(char *dir, char *curr_cwd, node **head, char **argv, char **arr, int history);
-int _cd(char *dir, char *value, node **head, char **argv, char **arr, int history);
+int _cd(node **head, char **argv, char **arr, int history);
 
 int check_change_dir(char *curr_cwd, char *new_dir, char *name, node **head, char **argv, char **arr, int history);
 int null_dir(char *curr_cwd, node **head, char **argv, char **arr, int history);
 int past_dir(char *curr_cwd, node **head, char **argv, char **arr, int history);
 int back_dir(char *curr_cwd, node **head, char **argv, char **arr, int history);
 
+size_t print_ali(const ali *h);
+ali *add_ali_end(ali **head, char *name, char *value);
+void free_ali(ali *head);
+char *_alias(char *arg, ali **head);
 
 #endif

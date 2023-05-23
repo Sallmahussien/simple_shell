@@ -26,8 +26,6 @@ char *get_linked_list_var(node *curr_node)
 
 /**
  * set_env - change or add an environment variable
- * @var: the varibale
- * @value: the value
  * @head: the head node
  * @argv: array of character pointers to the arguments from main
  * @arr: array of character pinter to parsed string
@@ -35,20 +33,22 @@ char *get_linked_list_var(node *curr_node)
  * Return: 0 or -1
  */
 
-int set_env(char *var, char *value, node **head, char **argv, char **arr, int history)
+int set_env(node **head, char **argv, char **arr, int history)
 {
 	node *env_list;
 	char *name, *val = NULL;
 
+	if (strnum(arr) != 3)
+		return (env_err(argv, arr, history));
+
 	env_list = *head;
-	val = malloc(sizeof(char) * (_strlen(var) + _strlen(value) + 2));
+	val = malloc(sizeof(char) * (_strlen(arr[1]) + _strlen(arr[2]) + 2));
 	if (val == NULL)
 		return (env_err(argv, arr, history));
-	_strcpy(val, var);
+	_strcpy(val, arr[1]);
 	_strcat(val, "=");
-	_strcat(val, value);
+	_strcat(val, arr[2]);
 	val[_strlen(val)] = '\0';
-
 	while (env_list != NULL)
 	{
 		if (env_list->data == NULL)
@@ -59,7 +59,7 @@ int set_env(char *var, char *value, node **head, char **argv, char **arr, int hi
 		else
 		{
 			name = get_linked_list_var(env_list);
-			if (_strcmp(name, var) == 0)
+			if (_strcmp(name, arr[1]) == 0)
 			{
 				free(env_list->data);
 				env_list->data = _strdup(val);
@@ -74,14 +74,11 @@ int set_env(char *var, char *value, node **head, char **argv, char **arr, int hi
 	}
 	add_node_end(head, val);
 	free(val);
-
 	return (0);
 }
 
 /**
  * unset_env - Remove an environment variable
- * @var: the variable of the environment that will be removed
- * @value: value
  * @head: the head node
  * @argv: array of character pointers to the arguments from main
  * @arr: array of character pinter to parsed string
@@ -89,35 +86,31 @@ int set_env(char *var, char *value, node **head, char **argv, char **arr, int hi
  * Return: 0 or -1
  */
 
-int unset_env(char *var, char *value, node **head, char **argv, char **arr, int history)
+int unset_env(node **head, char **argv, char **arr, int history)
 {
 	node *env_list;
 	char *name;
 	int i = 0, check;
 
-	UNUSED(value);
+	if (strnum(arr) != 2)
+		return (env_err(argv, arr, history));
 	env_list = *head;
 	while (env_list != NULL)
 	{
 		i++;
 		if (env_list->data == NULL)
-		{
-			perror("env_list");
 			return (env_err(argv, arr, history));
-		}
-		else
+
+		name = get_linked_list_var(env_list);
+		if (_strcmp(name, arr[1]) == 0)
 		{
-			name = get_linked_list_var(env_list);
-			if (_strcmp(name, var) == 0)
+			check = delete_node_at_index(head, i - 1);
+			free(name);
+			if (check == 1)
+				return (0);
+			else if (check == -1)
 			{
-				check = delete_node_at_index(head, i - 1);
-				free(name);
-				if (check == 1)
-					return (0);
-				else if (check == -1)
-				{
-					return (env_err(argv, arr, history));
-				}
+				return (env_err(argv, arr, history));
 			}
 		}
 		free(name);

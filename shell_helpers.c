@@ -47,12 +47,14 @@ char **parse_string(char *lineptr, char *delim)
  * execute - execute the command with arguments
  * @args: array to character pointers to command and argument
  * @argv: array of pointers to arguments from main func
+ * @history: history
  * Return: -1 on error and 0 on sucess
 */
-int execute(char **args, char **argv)
+int execute(char **args, char **argv, int history)
 {
 	pid_t pid;
 	int exec = 0, status;
+	char *err;
 
 	pid = fork();
 		if (pid == -1)
@@ -64,8 +66,15 @@ int execute(char **args, char **argv)
 		{
 			if (execve(args[0], args, NULL) == -1)
 			{
-				perror(argv[0]);
-				exec = 2;
+				write(STDERR_FILENO, argv[0], _strlen(argv[0]));
+				write(STDERR_FILENO, ": ", 2);
+				err = tostring(history);
+				write(STDERR_FILENO, err, _strlen(err));
+				write(STDERR_FILENO, ": ", 2);
+				write(STDERR_FILENO, args[1], _strlen(args[1]));
+				write(STDERR_FILENO, ": Permission denied\n", 22);
+				free(err);
+				exec = 126;
 				_exit(exec);
 			}
 		}

@@ -5,6 +5,9 @@
  * @dir: directry name
  * @curr_cwd: current cwd
  * @head: head node of linked list
+ * @argv: array of character pointer to argumnets from main
+ * @arr: arry of character pointer to parsed string
+ * @history: history
  * Return: 0 or -1
  */
 
@@ -47,6 +50,9 @@ int change_dir(char *dir,  char *curr_cwd, node **head, char **argv, char **arr,
  * @dir: directry name
  * @curr_cwd: current cwd
  * @head: head node of linked list
+ * @argv: array of character pointer to argumnets from main
+ * @arr: arry of character pointer to parsed string
+ * @history: history
  * Return: 0 or 2
  */
 
@@ -81,19 +87,19 @@ int change_dir_direct(char *dir, char *curr_cwd, node **head, char **argv, char 
 
 /**
  * _cd - Changes the current directory of the process.
- * @dir: the dir that will changed to
- * @value: not used
  * @head: head node of the linked list of the environment
+ * @argv: array of character pointer to argumnets from main
+ * @arr: arry of character pointer to parsed string
+ * @history: history
  * Return: 0 on success or 2 on falier
  */
 
-int _cd(char *dir, char *value, node **head, char **argv, char **arr, int history)
+int _cd(node **head, char **argv, char **arr, int history)
 {
 	char curr_cwd[300];
 	node *env_list;
 	int ret;
 
-	UNUSED(value);
 	env_list = *head;
 	if (getcwd(curr_cwd, sizeof(curr_cwd)) == NULL)
 	{
@@ -104,8 +110,8 @@ int _cd(char *dir, char *value, node **head, char **argv, char **arr, int histor
 	if (dir == NULL || _strcmp(dir, "~") == 0)
 		ret = null_dir(curr_cwd, &env_list, argv, arr, history);
 	else if (dir[0] == '/')
-		ret = change_dir(dir, curr_cwd, &env_list, argv, arr, history);
-	else if (_strcmp(dir, "..") == 0)
+		ret = change_dir(arr[1], curr_cwd, &env_list, argv, arr, history);
+	else if (_strcmp(arr[1], "..") == 0)
 	{
 		if (_strcmp(curr_cwd, "/") == 0)
 			return (0);
@@ -114,22 +120,7 @@ int _cd(char *dir, char *value, node **head, char **argv, char **arr, int histor
 	else if (_strcmp(dir, "-") == 0)
 		ret = past_dir(curr_cwd, &env_list, argv, arr, history);
 	else
-		ret = change_dir_direct(dir, curr_cwd, &env_list, argv, arr, history);
+		ret = change_dir_direct(arr[1], curr_cwd, &env_list, argv, arr, history);
 
 	return (ret);
 }
-
-
-/**int main(int argc,char **argv)
-{
-  node *env_list;
-  char **env = environ, *arg = NULL;
-
-  env_list = get_env_list(env);
-
-  _cd(argv[1], "whateever", &env_list);
-//argv[1] = array[1], whatwever = unused(value)
-
-  free_list(env_list);
-  return (0);
-}*/

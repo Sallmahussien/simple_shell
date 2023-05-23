@@ -1,21 +1,6 @@
 #include "main.h"
 
 /**
- * struct ali - linked list of the environment
- * @name: alias name
- * @value: alias value
- * @next: points to the next node
- */
-
-typedef struct ali
-{
-	char *name;
-	char *value;
-	struct ali *next;
-} ali;
-
-
-/**
  * print_ali - function that prints all the elements of an ali list.
  * @h: a singly linked list
  * Return: the number of nodes
@@ -160,6 +145,7 @@ char *_alias(char *arg, ali **head)
 				return ((*head)->value);
 		}
 	}
+	return (NULL);
 }
 
 /**int main(int argc, char **argv)
