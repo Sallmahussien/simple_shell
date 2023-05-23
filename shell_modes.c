@@ -35,15 +35,15 @@ int interactive(char **argv, char **envp, node *env_list, ali *list)
 			ret = is_exit(arr, lineptr, argv, ret, env_list, sequences);
 			if (ret == 1)
 			{
-                        	j++;
-                        	continue;
+				j++;
+				continue;
 			}
 
-                	is_builtin = check_builtins(env_list, arr, &ret, argv, history);
-                	if (is_builtin)
+			is_builtin = check_builtins(env_list, arr, &ret, argv, history);
+			if (is_builtin)
 			{
 				j++;
-                        	continue;
+				continue;
 			}
 
 			if (!_strcmp("alias", arr[0]))
@@ -54,18 +54,14 @@ int interactive(char **argv, char **envp, node *env_list, ali *list)
 				continue;
 			}
 
-                	is_dir = check_command(arr, envp, argv, history);
-                	if (!is_dir)
-                	{
-                        	ret = 127;
+			is_dir = check_command(arr, envp, argv, history, &exec);
+			if (!is_dir)
+			{
+				ret = 127;
 				j++;
-                        	continue;
-                	}
-
-                	exec = execute(arr, argv, history);
-
-                	ret = exec;
-                	free_arr(arr);
+				continue;
+			}
+			ret = exec;
 			j++;
 		}
 		free_arr(sequences);
@@ -116,15 +112,14 @@ int non_interactive(char **argv, char **envp, node *env_list, ali *list)
 				j++;
 				continue;
 			}
-			is_dir = check_command(arr, envp, argv, history);
+
+			is_dir = check_command(arr, envp, argv, history, &exec);
 			if (!is_dir)
 			{
 				ret = 127;
 				j++;
 				continue;
 			}
-			exec = execute(arr, argv, history);
-			free_arr(arr);
 			j++;
 		}
 		i++;
@@ -151,7 +146,6 @@ int file_command(char **argv, char **envp, node *env_list, ali *list)
 	ssize_t op, rd;
 
 	UNUSED(list);
-
 
 	op = open(argv[1], O_RDONLY);
 	if (op == -1)
@@ -197,17 +191,15 @@ int file_command(char **argv, char **envp, node *env_list, ali *list)
 				j++;
 				continue;
 			}
-			is_dir = check_command(arr, envp, argv, history);
+
+			is_dir = check_command(arr, envp, argv, history, &exec);
 			if (!is_dir)
 			{
 				ret = 127;
 				j++;
 				continue;
 			}
-			exec = execute(arr, argv, history);
-			free_arr(arr);
 			j++;
-
 		}
 		i++;
 		free_arr(sequences);

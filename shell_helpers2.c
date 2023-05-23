@@ -38,7 +38,7 @@ int is_exit(char **arr, char *lineptr, char **argv, int ret, node *env_list,
  * @history: history
  * Return: 0 if the input is not command, 1 if it's command
  */
-int check_command(char **arr, char **envp, char **argv, int history)
+int check_command(char **arr, char **envp, char **argv, int history, int *exec)
 {
 	char *path, **dirs, *arg_path, *err_n;
 	int is_dir = 1;
@@ -58,18 +58,20 @@ int check_command(char **arr, char **envp, char **argv, int history)
 		write(STDERR_FILENO, ": not found\n", 12);
 		free(err_n);
 		free(arg_path);
-		free(path);
 		free_arr(arr);
+		free(path);
 		is_dir = 0;
 	}
 	else
 	{
-		if (_strlen(arr[0]) != _strlen(arg_path))
+		/*if (_strlen(arr[0]) != _strlen(arg_path))
 		{
 			free(arr[0]);
 			arr[0] = malloc(sizeof(char) * (_strlen(arg_path) + 1));
 			_strcpy(arr[0], arg_path);
-		}
+		}*/
+		*exec = execute(arr, argv, history, arg_path);
+		free_arr(arr);
 		free(arg_path);
 		free(path);
 	}

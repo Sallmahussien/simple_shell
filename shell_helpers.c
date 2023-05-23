@@ -50,7 +50,7 @@ char **parse_string(char *lineptr, char *delim)
  * @history: history
  * Return: -1 on error and 0 on sucess
 */
-int execute(char **args, char **argv, int history)
+int execute(char **args, char **argv, int history, char *arg_path)
 {
 	pid_t pid;
 	int exec = 0, status;
@@ -64,7 +64,7 @@ int execute(char **args, char **argv, int history)
 		}
 		else if (pid == 0)
 		{
-			if (execve(args[0], args, NULL) == -1)
+			if (execve(arg_path, args, NULL) == -1)
 			{
 				write(STDERR_FILENO, argv[0], _strlen(argv[0]));
 				write(STDERR_FILENO, ": ", 2);
