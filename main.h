@@ -79,7 +79,7 @@ char *_strdup(char *str);
 char *tostring(int num);
 int strnum(char **arr);
 
-char *_strtok(char *str, const char *delim);
+char *_strtok(char *str,char *delim);
 
 char *get_path(char **envp);
 char **get_dirs(char *path);

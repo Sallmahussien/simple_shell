@@ -7,7 +7,7 @@
  * Return: pointer to tokens
 */
 
-char *_strtok(char *str, const char *delim)
+char *_strtok(char *str, char *delim)
 {
 	static char *ptr;
 	char *token;
