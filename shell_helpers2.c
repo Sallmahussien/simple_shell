@@ -11,7 +11,8 @@
  * Return: status exit value
 */
 
-int is_exit(char **arr, char *lineptr, char **argv, int ret, node *env_list, char **sequences)
+int is_exit(char **arr, char *lineptr, char **argv, int ret, node *env_list,
+		char **sequences)
 {
 	if (_strcmp(arr[0], "exit") == 0 && arr[1] == NULL)
 	{
@@ -84,7 +85,8 @@ int check_command(char **arr, char **envp, char **argv, int history)
  * @history: history
  * Return: 0 if the command is not built-in, 1 otherwise
  */
-int check_builtins(node *env_list, char **arr, int *ret, char **argv, int history)
+int check_builtins(node *env_list, char **arr, int *ret, char **argv,
+		int history)
 {
 	int is_builtin = 0, i;
 	builtin my_builtins[] = {
@@ -106,6 +108,13 @@ int check_builtins(node *env_list, char **arr, int *ret, char **argv, int histor
 	check_null(my_builtins[i].command, arr, &is_builtin);
 	return (is_builtin);
 }
+
+/**
+ * check_null - check if the commd is null or not
+ * @command: command
+ * @arr: array of character pointer to parsed string
+ * @is_builtin: builtin command or not
+ */
 void check_null(char *command, char **arr, int *is_builtin)
 {
 	if (command)

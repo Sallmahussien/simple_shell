@@ -93,11 +93,6 @@ char *file_dir(char **dirs, char *file_name)
 	flag = (file_name[0] == '/') ? 1 : 0;
 	for (i = 0; dirs[i] != NULL; i++)
 	{
-		/*if (chdir(dirs[i]) == -1)
-		{
-			perror("chdir failed");
-			continue;
-		}*/
 		if (flag == 1)
 		{
 			arg_path = malloc(sizeof(char) * (strlen(file_name) + 1));
@@ -132,7 +127,7 @@ char *file_dir(char **dirs, char *file_name)
 }
 /**
  * free_arr - free array from malloc
- * @dirs: pointer of array of direcertires
+ * @arr: pointer of array of direcertires
  * Return: void
  */
 
@@ -144,19 +139,3 @@ void free_arr(char **arr)
 		free(arr[ii]);
 	free(arr);
 }
-
-/*int main(int argc __attribute__((unused)), char **argv __attribute__((unused)))
-{
-	char  *path, *arg_path, **dirs;
-
-	path = get_path();
-	dirs = get_dirs(path);
-	arg_path = file_dir(dirs, argv[1]);
-
-	printf("%s", arg_path);
-
-
-	free(arg_path);
-	free(path);
-	return (0);
-}*/

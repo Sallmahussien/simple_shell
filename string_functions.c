@@ -92,8 +92,8 @@ char *_strcat(char *dest, char *src)
 	int len = 0;
 	int len2 = 0;
 
-        len = _strlen(dest);
-        len2 = _strlen(src);
+	len = _strlen(dest);
+	len2 = _strlen(src);
 	for (i = 0; i < len2; i++)
 		dest[len++] = src[i];
 	dest[len] = '\0';

@@ -14,8 +14,9 @@ char *_strtok(char *str, const char *delim)
 
 	if (str != NULL)
 		ptr = str;
-	while (*ptr == ' ')
-		ptr++;
+
+	while(!_strncmp(ptr, delim, _strlen(delim)))
+		ptr += _strlen(delim);
 
 	if (ptr == NULL || *ptr == '\0')
 		return (NULL);

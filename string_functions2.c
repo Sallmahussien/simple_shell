@@ -91,7 +91,7 @@ char *_strdup(char *str)
 }
 
 /**
- * strnum: return number of strings in array of strings
+ * strnum - return number of strings in array of strings
  * @arr: array of pointer to strings
  * Return: no of strings
  */

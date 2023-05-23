@@ -181,7 +181,8 @@ char *read_for_noninteractive(ssize_t fd)
  * Return: return value of exit
 */
 
-int handle_exit_err (char **arr, char **argv, char *lineptr, node *env_list, char **sequences)
+int handle_exit_err(char **arr, char **argv, char *lineptr, node *env_list,
+		char **sequences)
 {
 	int ret = 0;
 
