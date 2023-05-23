@@ -101,7 +101,7 @@ int _cd(char *dir, char *value, node **head, char **argv, char **arr, int histor
 		return (2);
 	}
 
-	if (dir == NULL)
+	if (dir == NULL || _strcmp(dir, "~") == 0)
 		ret = null_dir(curr_cwd, &env_list, argv, arr, history);
 	else if (dir[0] == '/')
 		ret = change_dir(dir, curr_cwd, &env_list, argv, arr, history);
