@@ -12,7 +12,7 @@
 */
 
 int is_exit(char **arr, char *lineptr, char **argv, int *exec, node *env_list,
-		char **sequences, char **commands)
+		char **sequences, char **commands, int history)
 {
 	int ret = 0;
 	if (_strcmp(arr[0], "exit") == 0 && arr[1] == NULL)
@@ -26,7 +26,7 @@ int is_exit(char **arr, char *lineptr, char **argv, int *exec, node *env_list,
 	}
 	else if (_strcmp(arr[0], "exit") == 0 && arr[1] != NULL)
 	{
-		ret = handle_exit_err(arr, argv, lineptr, env_list, sequences, exec, commands);
+		ret = handle_exit_err(arr, argv, lineptr, env_list, sequences, exec, commands, history);
 	}
 
 	return (ret);

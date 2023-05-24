@@ -164,14 +164,17 @@ char *read_for_noninteractive(ssize_t fd)
 */
 
 int handle_exit_err(char **arr, char **argv, char *lineptr, node *env_list,
-		char **sequences, int *exec, char **commands)
+		char **sequences, int *exec, char **commands, int history)
 {
-	int ret = 0;
+	int ret = 0, num = _atoi(arr[1]);
+	char *err = NULL;
 
+	while (num > 255)
+		num -= 256;
 
-	if ((arr[1][0] - '0' == 0 || _atoi(arr[1]) > 0) && _atoi(arr[1]) <= 255)
+	if ((arr[1][0] - '0' == 0 || num > 0) && num <= 255)
 	{
-		ret = _atoi(arr[1]);
+		ret = num;
 		free_arr(arr);
 		free(lineptr);
 		free_list(env_list);
@@ -182,31 +185,16 @@ int handle_exit_err(char **arr, char **argv, char *lineptr, node *env_list,
 	else if (_atoi(arr[1]) <= 0)
 	{
 		write(STDERR_FILENO, argv[0], _strlen(argv[0]));
-		write(STDERR_FILENO, ": exit: Illegal number: ", 25);
+		write(STDERR_FILENO, ": ", 2);
+		err = tostring(history);
+		write(STDERR_FILENO, err, _strlen(err));
+		write(STDERR_FILENO, ": exit: Illegal number: ", 24);
 		write(STDERR_FILENO, arr[1], _strlen(arr[1]));
 		write(STDERR_FILENO, "\n", 1);
 		*exec = 2;
 		ret = 1;
+		free(err);
 		free_arr(arr);
-	}
-	else if (_atoi(arr[1]) == 1000)
-	{
-		free_arr(arr);
-		free(lineptr);
-		free_list(env_list);
-		free_arr(sequences);
-		free_arr(commands);
-		exit(ret);
-	}
-	else
-	{
-		ret = _atoi(arr[1]) - 256;
-		free_arr(arr);
-		free(lineptr);
-		free_list(env_list);
-		free_arr(sequences);
-		free_arr(commands);
-		exit(ret);
 	}
 
 	return (ret);

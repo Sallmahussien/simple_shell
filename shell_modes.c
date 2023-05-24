@@ -36,7 +36,7 @@ int interactive(char **argv, char **envp, node *env_list, ali *list)
 				free_arr(arr);
 				break;
 			}
-			ret = is_exit(arr, lineptr, argv, &exec, env_list, sequences, NULL);
+			ret = is_exit(arr, lineptr, argv, &exec, env_list, sequences, NULL, history);
 			if (ret == 1)
 			{
 				j++;
@@ -87,7 +87,7 @@ int non_interactive(char **argv, char **envp, node *env_list, ali *list)
 				free_arr(arr);
 				break;
 			}
-			ret = is_exit(arr, buffer, argv, &exec, env_list, sequences, commands);
+			ret = is_exit(arr, buffer, argv, &exec, env_list, sequences, commands, history);
 			if (ret == 1)
 			{
 				exec = 2;
@@ -167,7 +167,7 @@ int file_command(char **argv, char **envp, node *env_list, ali *list)
 				break;
 			}
 
-			ret = is_exit(arr, buffer, argv, &exec, env_list, sequences, commands);
+			ret = is_exit(arr, buffer, argv, &exec, env_list, sequences, commands, history);
 			if (ret == 1)
 			{
 				exec = 2;
