@@ -54,10 +54,10 @@ char **get_dirs(char *path)
 		return (NULL);
 
 	i = 0;
-	dir = _strtok(path, "=");
+	dir = strtok(path, "=");
 
 	do {
-		dir = _strtok(NULL, ":");
+		dir = strtok(NULL, ":");
 		if (dir == NULL)
 			break;
 		dirs[i] = malloc(sizeof(char) * (_strlen(dir) + 1));

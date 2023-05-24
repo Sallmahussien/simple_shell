@@ -19,21 +19,21 @@ char **parse_string(char *lineptr, char *delim)
 	cpy_input = malloc(sizeof(char) * (_strlen(lineptr) + 1));
 	_strcpy(cpy_input, input);
 
-	token = _strtok(input, delim);
+	token = strtok(input, delim);
 	while (token != NULL)
 	{
 		no_tokens++;
-		token = _strtok(NULL, delim);
+		token = strtok(NULL, delim);
 	}
 
 	arg = malloc(sizeof(char *) * (no_tokens + 1));
 
-	token = _strtok(cpy_input, delim);
+	token = strtok(cpy_input, delim);
 	while (token)
 	{
 		arg[i] = malloc(sizeof(char) * (_strlen(token) + 1));
 		_strcpy(arg[i++], token);
-		token = _strtok(NULL, delim);
+		token = strtok(NULL, delim);
 	}
 	arg[i] = NULL;
 
