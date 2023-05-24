@@ -119,8 +119,8 @@ int non_interactive(char **argv, char **envp, node *env_list, ali *list)
  */
 int file_command(char **argv, char **envp, node *env_list, ali *list)
 {
-	char *buffer, **arr, **commands, *err = NULL, **sequences;
-	int exec = 0, i = 0, ret = 0, history = 0, is_dir, is_builtin, j, k;
+	char *buffer, **arr, **commands = NULL, *err = NULL, **sequences;
+	int exec = 0, i = 0, ret = 0, history = 0, is_dir, is_builtin, j;
 	ssize_t op, rd;
 
 	UNUSED(list);
@@ -142,15 +142,16 @@ int file_command(char **argv, char **envp, node *env_list, ali *list)
 	
 	buffer = malloc(sizeof(char) * 1024);
 	rd = read(op, buffer, 1023);
-	if (rd == -1)
-		return (-1);
+	if (rd == 0)
+	{
+		free(buffer);
+		free_list(env_list);
+		return (0);
+	}
 	buffer[rd - 1] = '\0';
 	close (op);
 
 	commands = parse_string(buffer, "\n");
-
-	for (k = 0; commands[k]; k++)
-		printf("commands: %s\n", commands[k]);
 
 	while(commands[i])
 	{
