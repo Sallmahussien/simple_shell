@@ -134,6 +134,8 @@ int past_dir(char *curr_cwd, node **head, char **argv, char **arr, int history)
 		free(new_dir);
 		env_list = env_list->next;
 	}
+	write(STDOUT_FILENO, curr_cwd, _strlen(curr_cwd));
+	write(STDOUT_FILENO, "\n", 1);
 	return (2);
 }
 
