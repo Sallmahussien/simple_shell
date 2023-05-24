@@ -132,7 +132,7 @@ int file_command(char **argv, char **envp, node *env_list, ali *list)
 		write(STDERR_FILENO, ": ", 2);
 		err = tostring(history);
 		write(STDERR_FILENO, err, _strlen(err));
-		write(STDERR_FILENO, ": Can't open ", 14);
+		write(STDERR_FILENO, ": Can't open ", 13);
 		write(STDERR_FILENO, argv[1], _strlen(argv[1]));
 		write(STDERR_FILENO, "\n", 1);
 		free(err);
