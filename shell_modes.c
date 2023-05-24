@@ -31,6 +31,11 @@ int interactive(char **argv, char **envp, node *env_list, ali *list)
 		while (sequences[j])
 		{
 			arr = parse_string(sequences[j], " ");
+			if (arr[0] == NULL)
+			{
+				free_arr(arr);
+				break;
+			}
 			ret = is_exit(arr, lineptr, argv, &exec, env_list, sequences);
 			if (ret == 1)
 			{
@@ -77,6 +82,11 @@ int non_interactive(char **argv, char **envp, node *env_list, ali *list)
 		while (sequences[j])
 		{
 			arr = parse_string(sequences[j], " ");
+			if (arr[0] == NULL)
+			{
+				free_arr(arr);
+				break;
+			}
 			ret = is_exit(arr, buffer, argv, &exec, env_list, sequences);
 			if (ret == 1)
 			{
@@ -146,6 +156,11 @@ int file_command(char **argv, char **envp, node *env_list, ali *list)
 		while (sequences[j])
 		{
 			arr = parse_string(sequences[j], " ");
+			if (arr[0] == NULL)
+			{
+				free_arr(arr);
+				break;
+			}
 
 			ret = is_exit(arr, buffer, argv, &exec, env_list, sequences);
 			if (ret == 1)
