@@ -164,7 +164,7 @@ char *read_for_noninteractive(ssize_t fd)
 */
 
 int handle_exit_err(char **arr, char **argv, char *lineptr, node *env_list,
-		char **sequences, int *exec)
+		char **sequences, int *exec, char **commands)
 {
 	int ret = 0;
 
@@ -185,6 +185,7 @@ int handle_exit_err(char **arr, char **argv, char *lineptr, node *env_list,
 		free(lineptr);
 		free_list(env_list);
 		free_arr(sequences);
+		free_arr(commands);
 		exit(ret);
 	}
 	else
@@ -194,6 +195,7 @@ int handle_exit_err(char **arr, char **argv, char *lineptr, node *env_list,
 		free(lineptr);
 		free_list(env_list);
 		free_arr(sequences);
+		free_arr(commands);
 		exit(ret);
 	}
 

@@ -12,7 +12,7 @@
 */
 
 int is_exit(char **arr, char *lineptr, char **argv, int *exec, node *env_list,
-		char **sequences)
+		char **sequences, char **commands)
 {
 	int ret = 0;
 	if (_strcmp(arr[0], "exit") == 0 && arr[1] == NULL)
@@ -21,11 +21,12 @@ int is_exit(char **arr, char *lineptr, char **argv, int *exec, node *env_list,
 		free(lineptr);
 		free_list(env_list);
 		free_arr(sequences);
+		free_arr(commands);
 		exit(*exec);
 	}
 	else if (_strcmp(arr[0], "exit") == 0 && arr[1] != NULL)
 	{
-		ret = handle_exit_err(arr, argv, lineptr, env_list, sequences, exec);
+		ret = handle_exit_err(arr, argv, lineptr, env_list, sequences, exec, commands);
 	}
 
 	return (ret);
