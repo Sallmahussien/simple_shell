@@ -143,33 +143,13 @@ void *_realloc(void *ptr, unsigned int old_size, unsigned int new_size)
 */
 char *read_for_noninteractive(ssize_t fd)
 {
-	char *buffer = NULL;
-	size_t buffer_size = 0, size = 1024;
-	ssize_t rd;
+	char *buffer;
+	int rd;
 
-	buffer = malloc(sizeof(char) * (size + 1));
-	while ((rd = read(fd, buffer + buffer_size, size)) > 0)
-	{
+	buffer = malloc(sizeof(char) * 1024);
+	rd = read(fd, buffer, 1023);
 
-		buffer_size += rd;
-
-		if (buffer_size >= size)
-		{
-			size *= 2;
-			buffer = _realloc(buffer, sizeof(char) * buffer_size,
-				sizeof(char) * size);
-		}
-	}
-
-	if (rd == -1)
-	{
-		perror("read");
-		free(buffer);
-		return (NULL);
-	}
-
-	buffer[buffer_size - 1] = '\0';
-
+	buffer[rd - 1] = '\0';
 	return (buffer);
 }
 
@@ -184,7 +164,7 @@ char *read_for_noninteractive(ssize_t fd)
 */
 
 int handle_exit_err(char **arr, char **argv, char *lineptr, node *env_list,
-		char **sequences)
+		char **sequences, int *exec)
 {
 	int ret = 0;
 
@@ -194,6 +174,7 @@ int handle_exit_err(char **arr, char **argv, char *lineptr, node *env_list,
 		write(STDERR_FILENO, ": exit: Illegal number: ", 25);
 		write(STDERR_FILENO, arr[1], _strlen(arr[1]));
 		write(STDERR_FILENO, "\n", 1);
+		*exec = 2;
 		ret = 1;
 		free_arr(arr);
 	}

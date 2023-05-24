@@ -5,6 +5,7 @@
  * @argv: array of pointers to arguments
  * @envp: array of pointers to enviroment variables
  * @env_list: linked list of environment variables
+ * @list: list for aliases
  * Return: the return value of the execution
 */
 int interactive(char **argv, char **envp, node *env_list, ali *list)
@@ -12,13 +13,12 @@ int interactive(char **argv, char **envp, node *env_list, ali *list)
 	ssize_t p;
 	size_t n = 0;
 	char *lineptr = NULL, **arr, **sequences;
-	int exec, ret = 0, history = 0, is_dir, is_builtin, j, k;
+	int exec, ret = 0, history = 0, is_builtin, j;
 
 	while (1)
 	{
 		history++;
 		write(STDOUT_FILENO, "$ ", 2);
-
 		p = getline(&lineptr, &n, stdin);
 		if (p == -1)
 		{
@@ -26,46 +26,29 @@ int interactive(char **argv, char **envp, node *env_list, ali *list)
 			break;
 		}
 		lineptr[p - 1] = '\0';
-
 		sequences = parse_string(lineptr, ";");
 		j = 0;
 		while (sequences[j])
 		{
 			arr = parse_string(sequences[j], " ");
-			ret = is_exit(arr, lineptr, argv, ret, env_list, sequences);
+			ret = is_exit(arr, lineptr, argv, &exec, env_list, sequences);
 			if (ret == 1)
 			{
-				exec = 2;
 				j++;
 				continue;
 			}
-
-			is_builtin = check_builtins(env_list, arr, &ret, argv, history);
+			is_builtin = check_builtins(env_list, arr, &exec, argv, history);
 			if (is_builtin)
 			{
 				j++;
 				continue;
 			}
-
-			if (!_strcmp("alias", arr[0]))
-			{
-				for (k = 1; arr[k]; k++)
-					_alias(arr[k], &list);
-				j++;
-				continue;
-			}
-
-			is_dir = check_command(arr, envp, argv, history, &exec);
-			if (!is_dir)
-				exec = 127;
+			check_command(arr, envp, argv, history, &exec);
 			j++;
 		}
 		free_arr(sequences);
 	}
-
-	free(lineptr);
-	free_list(env_list);
-	free_ali(list);
+	free_interactive(lineptr, env_list, list);
 	return (exec);
 }
 
@@ -80,48 +63,40 @@ int non_interactive(char **argv, char **envp, node *env_list, ali *list)
 {
 	char *buffer;
 	char **arr, **commands, **sequences;
-	int exec = 0, i = 0, ret = 0, history = 0, is_dir, is_builtin, j;
+	int exec = 0, i = 0, ret = 0, history = 0, is_builtin, j;
 
 	UNUSED(list);
-
-	buffer = read_for_noninteractive(STDIN_FILENO);
+	
+	buffer= read_for_noninteractive(STDIN_FILENO);
 	commands = parse_string(buffer, "\n");
-
-	while(commands[i])
+	while (commands[i])
 	{
 		history++;
-
 		sequences = parse_string(commands[i], ";");
 		j = 0;
 		while (sequences[j])
 		{
 			arr = parse_string(sequences[j], " ");
-			ret = is_exit(arr, buffer, argv, ret, env_list, sequences);
+			ret = is_exit(arr, buffer, argv, &exec, env_list, sequences);
 			if (ret == 1)
 			{
 				exec = 2;
 				j++;
 				continue;
 			}
-			is_builtin = check_builtins(env_list, arr, &ret, argv, history);
+			is_builtin = check_builtins(env_list, arr, &exec, argv, history);
 			if (is_builtin)
 			{
 				j++;
 				continue;
 			}
-
-			is_dir = check_command(arr, envp, argv, history, &exec);
-			if (!is_dir)
-				exec = 127;
+			check_command(arr, envp, argv, history, &exec);
 			j++;
 		}
 		i++;
 		free_arr(sequences);
 	}
-	free_arr(commands);
-	free(buffer);
-	free_list(env_list);
-
+	free_noninteractive(commands, buffer, env_list);
 	return (exec);
 }
 
@@ -172,14 +147,14 @@ int file_command(char **argv, char **envp, node *env_list, ali *list)
 		{
 			arr = parse_string(sequences[j], " ");
 
-			ret = is_exit(arr, buffer, argv, ret, env_list, sequences);
+			ret = is_exit(arr, buffer, argv, &exec, env_list, sequences);
 			if (ret == 1)
 			{
 				exec = 2;
 				j++;
 				continue;
 			}
-			is_builtin = check_builtins(env_list, arr, &ret, argv, history);
+			is_builtin = check_builtins(env_list, arr, &exec, argv, history);
 			if (is_builtin)
 			{
 				j++;

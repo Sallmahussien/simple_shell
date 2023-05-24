@@ -11,20 +11,21 @@
  * Return: status exit value
 */
 
-int is_exit(char **arr, char *lineptr, char **argv, int ret, node *env_list,
+int is_exit(char **arr, char *lineptr, char **argv, int *exec, node *env_list,
 		char **sequences)
 {
+	int ret = 0;
 	if (_strcmp(arr[0], "exit") == 0 && arr[1] == NULL)
 	{
 		free_arr(arr);
 		free(lineptr);
 		free_list(env_list);
 		free_arr(sequences);
-		exit(ret);
+		exit(*exec);
 	}
 	else if (_strcmp(arr[0], "exit") == 0 && arr[1] != NULL)
 	{
-		ret = handle_exit_err(arr, argv, lineptr, env_list, sequences);
+		ret = handle_exit_err(arr, argv, lineptr, env_list, sequences, exec);
 	}
 
 	return (ret);
@@ -60,6 +61,7 @@ int check_command(char **arr, char **envp, char **argv, int history, int *exec)
 		free(arg_path);
 		free_arr(arr);
 		free(path);
+		*exec = 127;
 		is_dir = 0;
 	}
 	else
