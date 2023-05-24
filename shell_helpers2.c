@@ -70,7 +70,7 @@ int check_command(char **arr, char **envp, char **argv, int history, int *exec)
 			arr[0] = malloc(sizeof(char) * (_strlen(arg_path) + 1));
 			_strcpy(arr[0], arg_path);
 		}*/
-		*exec = execute(arr, argv, history, arg_path);
+		*exec = execute(arr, argv, history, arg_path, envp);
 		free_arr(arr);
 		free(arg_path);
 		free(path);

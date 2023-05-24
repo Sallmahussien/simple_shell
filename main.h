@@ -58,7 +58,7 @@ int non_interactive(char **argv, char **envp, node *env_list, ali *list);
 int file_command(char **argv, char **envp, node *env_list, ali *list);
 
 char **parse_string(char *lineptr, char *delim);
-int execute(char **args, char **argv, int history, char *arg_path);
+int execute(char **args, char **argv, int history, char *arg_path, char **envp);
 void *_realloc(void *ptr, unsigned int old_size, unsigned int new_size);
 char *read_for_noninteractive(ssize_t fd);
 int handle_exit_err (char **arr, char **argv, char *lineptr, node *env_list, char **sequences);
