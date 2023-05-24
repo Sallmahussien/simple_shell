@@ -3,18 +3,20 @@
 /**
  * is_exit - check if the input is "exit or not"
  * @arr: array of parsed strings
- * @argv: argument list that comes from main
  * @lineptr: buffer that be read from getline
- * @ret: the return of the previous process
+ * @argv: argument list that comes from main
+ * @exec: the return of the previous process
  * @env_list: linked list for environment variables
  * @sequences: array to pointers to sequencing commands
+ * @commands: array to pointers to commands
+ * @history: history
  * Return: status exit value
 */
-
 int is_exit(char **arr, char *lineptr, char **argv, int *exec, node *env_list,
 		char **sequences, char **commands, int history)
 {
 	int ret = 0;
+
 	if (_strcmp(arr[0], "exit") == 0 && arr[1] == NULL)
 	{
 		free_arr(arr);
@@ -26,7 +28,8 @@ int is_exit(char **arr, char *lineptr, char **argv, int *exec, node *env_list,
 	}
 	else if (_strcmp(arr[0], "exit") == 0 && arr[1] != NULL)
 	{
-		ret = handle_exit_err(arr, argv, lineptr, env_list, sequences, exec, commands, history);
+		ret = handle_exit_err(arr, argv, lineptr, env_list, sequences, exec,
+		commands, history);
 	}
 
 	return (ret);
@@ -38,6 +41,7 @@ int is_exit(char **arr, char *lineptr, char **argv, int *exec, node *env_list,
  * @envp: array of character pointer to environment variables
  * @argv: argument list from main
  * @history: history
+ * @exec: pointer for the return value from execute
  * Return: 0 if the input is not command, 1 if it's command
  */
 int check_command(char **arr, char **envp, char **argv, int history, int *exec)

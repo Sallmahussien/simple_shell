@@ -89,54 +89,6 @@ int execute(char **args, char **argv, int history, char *arg_path, char **envp)
 }
 
 /**
- * _realloc -  reallocates a memory block using malloc and free.
- * @ptr:  pointer to the memory previously allocated with a call to malloc.
- * @old_size: old_size.
- * @new_size: new size, in bytes of the new memory block.
- * Return: pointer to new allocated mem
- */
-void *_realloc(void *ptr, unsigned int old_size, unsigned int new_size)
-{
-	void *arr;
-	char *mem, *ptrcp;
-	unsigned int i;
-
-	if (old_size == new_size)
-		return (ptr);
-	if (ptr == NULL)
-	{
-		arr = malloc(new_size);
-		if (arr == NULL)
-			return (NULL);
-		return (arr);
-	}
-	if (new_size == 0 && ptr != NULL)
-	{
-		free(ptr);
-		return (NULL);
-	}
-
-	if (new_size > old_size)
-	{
-		ptrcp = ptr;
-		mem = malloc(new_size);
-		if (mem == NULL)
-		{
-			free(ptr);
-			return (NULL);
-		}
-
-		arr = mem;
-
-		for (i = 0; i < old_size; i++)
-			mem[i] = ptrcp[i];
-
-		free(ptr);
-	}
-	return (arr);
-}
-
-/**
  * read_for_noninteractive - read the input for non-interactive mode
  * @fd: file descriptor
  * Return: pointer to buffer that has the input
@@ -160,6 +112,9 @@ char *read_for_noninteractive(ssize_t fd)
  * @lineptr: buffer that be read from getline
  * @env_list: linked list for environment variables
  * @sequences: array of pointers to sequences commands
+ *  @exec: the return of the previous process
+ * @commands: array to pointers to commands
+ * @history: history
  * Return: return value of exit
 */
 
