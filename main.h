@@ -126,9 +126,4 @@ int history);
 int back_dir(char *curr_cwd, node **head, char **argv, char **arr,
 int history);
 
-size_t print_ali(const ali *h);
-ali *add_ali_end(ali **head, char *name, char *value);
-void free_ali(ali *head);
-int _alias(char *arg, ali **head);
-
 #endif
