@@ -146,7 +146,7 @@ char *read_for_noninteractive(ssize_t fd)
 	char *buffer;
 	int rd;
 
-	buffer = malloc(sizeof(char) * 2024);
+	buffer = malloc(sizeof(char) * 1024);
 	rd = read(fd, buffer, 1023);
 
 	buffer[rd - 1] = '\0';
