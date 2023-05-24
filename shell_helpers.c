@@ -168,7 +168,18 @@ int handle_exit_err(char **arr, char **argv, char *lineptr, node *env_list,
 {
 	int ret = 0;
 
-	if (atoi(arr[1]) < 0)
+
+	if ((arr[1][0] - '0' == 0 || _atoi(arr[1]) > 0) && _atoi(arr[1]) <= 255)
+	{
+		ret = _atoi(arr[1]);
+		free_arr(arr);
+		free(lineptr);
+		free_list(env_list);
+		free_arr(sequences);
+		free_arr(commands);
+		exit(ret);
+	}
+	else if (_atoi(arr[1]) <= 0)
 	{
 		write(STDERR_FILENO, argv[0], _strlen(argv[0]));
 		write(STDERR_FILENO, ": exit: Illegal number: ", 25);
@@ -178,9 +189,8 @@ int handle_exit_err(char **arr, char **argv, char *lineptr, node *env_list,
 		ret = 1;
 		free_arr(arr);
 	}
-	else if (_atoi(arr[1]) >= 0 && _atoi(arr[1]) <= 255)
+	else if (_atoi(arr[1]) == 1000)
 	{
-		ret = _atoi(arr[1]);
 		free_arr(arr);
 		free(lineptr);
 		free_list(env_list);
