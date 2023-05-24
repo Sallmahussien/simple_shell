@@ -4,13 +4,11 @@
  * free_interactive - free buffer, lists
  * @lineptr: buffer from getline
  * @env_list: linked list to the environment variables
- * @list: linked list for aliases
 */
-void free_interactive(char *lineptr, node *env_list, ali *list)
+void free_interactive(char *lineptr, node *env_list)
 {
 	free(lineptr);
 	free_list(env_list);
-	free_ali(list);
 }
 
 /**

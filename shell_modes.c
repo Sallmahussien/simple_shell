@@ -5,10 +5,9 @@
  * @argv: array of pointers to arguments
  * @envp: array of pointers to enviroment variables
  * @env_list: linked list of environment variables
- * @list: list for aliases
  * Return: the return value of the execution
 */
-int interactive(char **argv, char **envp, node *env_list, ali *list)
+int interactive(char **argv, char **envp, node *env_list)
 {
 	ssize_t p;
 	size_t n = 0;
@@ -30,7 +29,7 @@ int interactive(char **argv, char **envp, node *env_list, ali *list)
 		shell_help(sequences, lineptr, argv, envp, &exec, env_list, &history,
 		commands);
 	}
-	free_interactive(lineptr, env_list, list);
+	free_interactive(lineptr, env_list);
 	return (exec);
 }
 
@@ -39,16 +38,13 @@ int interactive(char **argv, char **envp, node *env_list, ali *list)
  * @argv: array of pointers to arguments
  * @envp: array of character pointers to environment variables
  * @env_list: linked list of environment variables
- * @list: list for aliases
  * Return: the return value of the execution
 */
-int non_interactive(char **argv, char **envp, node *env_list, ali *list)
+int non_interactive(char **argv, char **envp, node *env_list)
 {
 	char *buffer;
 	char **commands, **sequences;
 	int exec = 0, i = 0, history = 0;
-
-	UNUSED(list);
 
 	buffer = read_for_noninteractive(STDIN_FILENO);
 	commands = parse_string(buffer, "\n");
@@ -69,16 +65,13 @@ int non_interactive(char **argv, char **envp, node *env_list, ali *list)
  * @argv: array of pointers to arguments
  * @envp: array of pointers to enviroment variables
  * @env_list: linked list of environment variables
- * @list: list for aliases
  * Return: the return value of the execution
  */
-int file_command(char **argv, char **envp, node *env_list, ali *list)
+int file_command(char **argv, char **envp, node *env_list)
 {
 	char *buffer, **commands = NULL, **sequences;
 	int exec = 0, i = 0, history = 0;
 	ssize_t op, rd;
-
-	UNUSED(list);
 
 	op = open(argv[1], O_RDONLY);
 	if (op == -1)

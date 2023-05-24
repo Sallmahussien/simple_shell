@@ -53,9 +53,9 @@ typedef struct ali
 	struct ali *next;
 } ali;
 
-int interactive(char **argv, char **envp, node *env_list, ali *list);
-int non_interactive(char **argv, char **envp, node *env_list, ali *list);
-int file_command(char **argv, char **envp, node *env_list, ali *list);
+int interactive(char **argv, char **envp, node *env_list);
+int non_interactive(char **argv, char **envp, node *env_list);
+int file_command(char **argv, char **envp, node *env_list);
 
 char **parse_string(char *lineptr, char *delim);
 int execute(char **args, char **argv, int history, char *arg_path,
@@ -73,7 +73,7 @@ int check_builtins(node *env_list, char **arr, int *ret, char **argv,
 int history);
 void check_null(char *command, char **arr, int *is_builtin);
 
-void free_interactive(char *lineptr, node *env_list, ali *list);
+void free_interactive(char *lineptr, node *env_list);
 void free_noninteractive(char **commands, char *buffer, node *env_list);
 void shell_help(char **sequences, char *lineptr, char **argv, char **envp,
 int *exec, node *env_list, int *history, char **commands);

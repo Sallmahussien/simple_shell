@@ -11,20 +11,19 @@ int main(int argc, char **argv, char **envp)
 {
 	int ret;
 	node *env_list;
-	ali *list = NULL;
 
 	env_list = get_env_list(envp);
 
 	if (argc != 1)
 	{
-		ret = file_command(argv, envp, env_list, list);
+		ret = file_command(argv, envp, env_list);
 		return (ret);
 	}
 
 	if (isatty(STDIN_FILENO))
-		ret = interactive(argv, envp, env_list, list);
+		ret = interactive(argv, envp, env_list);
 	else
-		ret = non_interactive(argv, envp, env_list, list);
+		ret = non_interactive(argv, envp, env_list);
 
 	return (ret);
 }
