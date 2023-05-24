@@ -42,7 +42,7 @@ char *tostring(int num)
 	{
 		str = malloc(sizeof(char) * 2);
 		str[0] = num + '0';
-		str[2] = '\0';
+		str[1] = '\0';
 		return (str);
 	}
 

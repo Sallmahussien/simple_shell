@@ -119,8 +119,8 @@ int non_interactive(char **argv, char **envp, node *env_list, ali *list)
  */
 int file_command(char **argv, char **envp, node *env_list, ali *list)
 {
-	char *buffer, **arr, **commands, *err, **sequences;
-	int exec = 0, i = 0, ret = 0, history = 0, is_dir, is_builtin, j;
+	char *buffer, **arr, **commands, *err = NULL, **sequences;
+	int exec = 0, i = 0, ret = 0, history = 0, is_dir, is_builtin, j, k;
 	ssize_t op, rd;
 
 	UNUSED(list);
@@ -132,10 +132,11 @@ int file_command(char **argv, char **envp, node *env_list, ali *list)
 		write(STDERR_FILENO, ": ", 2);
 		err = tostring(history);
 		write(STDERR_FILENO, err, _strlen(err));
-		write(STDERR_FILENO, ": Can't open ", 13);
+		write(STDERR_FILENO, ": Can't open ", 14);
 		write(STDERR_FILENO, argv[1], _strlen(argv[1]));
 		write(STDERR_FILENO, "\n", 1);
 		free(err);
+		free_list(env_list);
 		return (127);
 	}
 	
@@ -147,6 +148,9 @@ int file_command(char **argv, char **envp, node *env_list, ali *list)
 	close (op);
 
 	commands = parse_string(buffer, "\n");
+
+	for (k = 0; commands[k]; k++)
+		printf("commands: %s\n", commands[k]);
 
 	while(commands[i])
 	{
