@@ -15,7 +15,7 @@ size_t print_ali(const ali *h)
 		if (h->name == NULL || h->value == NULL)
 		{
 			perror("node->");
-			return (-1);
+			return (1);
 		}
 		else
 		{
@@ -100,10 +100,10 @@ void free_ali(ali *head)
  * _alias - set new alias and print alias ang get a value of alias name
  * @arg: alias argument
  * @head: linked list of aliases
- * Return: value of alias name or NULL
+ * Return: 0  on succ or 1
  */
 
-char *_alias(char *arg, ali **head)
+int _alias(char *arg, ali **head)
 {
 	char *token, *name, *value;
 	int i = 0, flag = 0;
@@ -111,7 +111,7 @@ char *_alias(char *arg, ali **head)
 	if (arg == NULL)
 	{
 		print_ali(*head);
-		return (NULL);
+		return (1);
 	}
 	while (arg[i])
 	{
@@ -126,11 +126,12 @@ char *_alias(char *arg, ali **head)
 		token = _strtok(arg, "=");
 		name = _strdup(token);
 		token = _strtok(NULL, "=");
+		printf("value = %s\n", token);
 		value = _strdup(token);
 		add_ali_end(head, name, value);
 		free(name);
 		free(value);
-		return (NULL);
+		return (1);
 	}
 	else
 	{
@@ -139,13 +140,21 @@ char *_alias(char *arg, ali **head)
 			if ((*head)->name == NULL || (*head)->value == NULL)
 			{
 				perror("list");
-				return (NULL);
+				return (1);
 			}
 			if (_strcmp(arg, (*head)->name) == 0)
-				return ((*head)->value);
+			  {
+			    write(STDOUT_FILENO, (*head)->name, _strlen((*head)->name));
+			    write(STDOUT_FILENO, "=", 1);
+			    write(STDOUT_FILENO, "'", 1);
+			    write(STDOUT_FILENO, (*head)->value, _strlen((*head)->value));
+			    write(STDOUT_FILENO, "'", 1);
+			    write(STDOUT_FILENO, "\n", 1);
+			    return (0);
+			  }
 		}
 	}
-	return (NULL);
+	return (1);
 }
 
 /**int main(int argc, char **argv)
