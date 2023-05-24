@@ -4,10 +4,10 @@
  * main - Entry point
  * @argc: no. of arguments
  * @argv: list of arguments
+ * @envp: environment
  * Return: 0 on success
  */
-int main(int argc __attribute__((unused)), char **argv __attribute__((unused)),
-		char **envp __attribute__((unused)))
+int main(int argc, char **argv, char **envp)
 {
 	int ret;
 	node *env_list;

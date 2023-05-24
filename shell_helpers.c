@@ -48,6 +48,8 @@ char **parse_string(char *lineptr, char *delim)
  * @args: array to character pointers to command and argument
  * @argv: array of pointers to arguments from main func
  * @history: history
+ * @arg_path: path
+ * @envp: environment
  * Return: -1 on error and 0 on sucess
 */
 int execute(char **args, char **argv, int history, char *arg_path, char **envp)

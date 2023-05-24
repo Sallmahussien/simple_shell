@@ -105,8 +105,8 @@ void free_ali(ali *head)
 
 int _alias(char *arg, ali **head)
 {
-	char *token, *name, *value;
-	int i = 0, flag = 0;
+  char *token, *name, *value, *clean_val;
+  int i = 0, flag = 0, ii, j = 0;
 
 	if (arg == NULL)
 	{
@@ -128,7 +128,14 @@ int _alias(char *arg, ali **head)
 		token = _strtok(NULL, "=");
 		printf("value = %s\n", token);
 		value = _strdup(token);
-		add_ali_end(head, name, value);
+		clean_val = malloc(sizeof(value));
+		for (ii = 0; value[ii] != '\0'; ii++)
+		  {
+		    if (value[ii] != '\'' && value[ii] != '\"')
+		      clean_val[j++] = value[ii];
+		    clean_val[j] = '\0';
+		  }
+		add_ali_end(head, name, clean_val);
 		free(name);
 		free(value);
 		return (1);
